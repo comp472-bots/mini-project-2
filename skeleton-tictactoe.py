@@ -9,9 +9,30 @@ class Game:
 	AI = 3
 	
 	def __init__(self, recommend = True):
+		self.get_parameters()
 		self.initialize_game()
 		self.recommend = recommend
+	
+	def get_parameters(self):
+		while True: 
+			try:
+				self.board_size = int(input("Enter size of board in range 3-10: "))
+			except ValueError: 
+				print ("That's not a number!")
+				continue
+			else:
+				self.board_size = int(self.board_size)
+				if  3 <= self.board_size <= 10:
+					return
+				else:
+					print ("Out of range... Try again!")
 		
+
+			print(self.board_size)
+		
+		
+
+	
 	def initialize_game(self):
 		self.current_state = [['.','.','.'],
 							  ['.','.','.'],
