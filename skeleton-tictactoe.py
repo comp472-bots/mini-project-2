@@ -63,27 +63,31 @@ class Game:
 		self.get_lineup_size()
 			# print(self.board_size)
 		
-	
+
 		
 
 	
 	def initialize_game(self):
-		self.current_state = [['.','.','.'],
-							  ['.','.','.'],
-							  ['.','.','.']]
+		# self.current_state = [['.','.','.'],
+				#			  ['.','.','.'],
+				#			  ['.','.','.']]
+
+		self.current_state = [["." for i in range(self.board_size)] for i in range(self.board_size)]
+		
+		print(self.current_state)
 		# Player X always plays first
 		self.player_turn = 'X'
 
 	def draw_board(self):
 		print()
-		for y in range(0, 3):
-			for x in range(0, 3):
+		for x in range(0, self.board_size):
+			for y in range(0, self.board_size):
 				print(F'{self.current_state[x][y]}', end="")
 			print()
 		print()
 		
 	def is_valid(self, px, py):
-		if px < 0 or px > 2 or py < 0 or py > 2:
+		if px < 0 or px > self.board_size-1 or py < 0 or py > self.board_size-1:
 			return False
 		elif self.current_state[px][py] != '.':
 			return False
@@ -138,8 +142,14 @@ class Game:
 	def input_move(self):
 		while True:
 			print(F'Player {self.player_turn}, enter your move:')
-			px = int(input('enter the x coordinate: '))
-			py = int(input('enter the y coordinate: '))
+			# px = int(input('enter the x coordinate: '))
+			# py = int(input('enter the y coordinate: '))
+
+			px = int(input(F'enter the row number (0-{self.board_size-1}) : '))
+			col = input(F'enter the column letter : ')
+			py = ord(col) - 65
+			print(py)
+
 			if self.is_valid(px, py):
 				return (px,py)
 			else:
