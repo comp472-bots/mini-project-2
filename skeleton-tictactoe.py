@@ -40,15 +40,30 @@ class Game:
 					return
 				else:
 					print ("Out of range... Try again!")
+					
 
+	def get_lineup_size(self):
+		while True: 
+			try:
+				self.lineup_size = int(input(("Enter winning line-up size in range 3-{range}: ").format(range = self.board_size)))
+			except ValueError: 
+				print ("That's not a number!")
+				continue
+			else:
+				self.lineup_size = int(self.lineup_size)
+				if  3 <= self.lineup_size <= self.board_size:
+					return
+				else:
+					print ("Out of range... Try again!")
 	
 	
 	def get_parameters(self):
 		self.get_board_size()
 		self.get_bloc_amount()
+		self.get_lineup_size()
 			# print(self.board_size)
 		
-
+	
 		
 
 	
