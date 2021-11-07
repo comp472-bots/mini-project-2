@@ -13,7 +13,7 @@ class Game:
 		self.initialize_game()
 		self.recommend = recommend
 	
-	def get_parameters(self):
+	def get_board_size(self):
 		while True: 
 			try:
 				self.board_size = int(input("Enter size of board in range 3-10: "))
@@ -26,10 +26,29 @@ class Game:
 					return
 				else:
 					print ("Out of range... Try again!")
+	
+	def get_bloc_amount(self):
+		while True: 
+			try:
+				self.bloc_amount = int(input(("Enter number of blocs in range 0-{range}: ").format(range = 2 * self.board_size)))
+			except ValueError: 
+				print ("That's not a number!")
+				continue
+			else:
+				self.bloc_amount = int(self.bloc_amount)
+				if  0 <= self.bloc_amount <= 2 * self.board_size:
+					return
+				else:
+					print ("Out of range... Try again!")
+
+	
+	
+	def get_parameters(self):
+		self.get_board_size()
+		self.get_bloc_amount()
+			# print(self.board_size)
 		
 
-			print(self.board_size)
-		
 		
 
 	
