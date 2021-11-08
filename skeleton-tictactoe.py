@@ -9,8 +9,9 @@ class Game:
 	AI = 3
 	
 	def __init__(self, recommend = True):
-		self.get_parameters()
+		self.get_board_size()
 		self.initialize_game()
+		self.get_parameters()
 		self.recommend = recommend
 	
 	def get_board_size(self):
@@ -40,8 +41,30 @@ class Game:
 					return
 				else:
 					print ("Out of range... Try again!")
-					
+	
+	def is_valid(self, px, py):
+		if px < 0 or px > self.board_size-1 or py < 0 or py > self.board_size-1:
+			return False
+		elif self.current_state[px][py] != '.':
+			return False
+		else:
+			return True
+	
+	def get_bloc_positions(self):
+		for i in range(self.bloc_amount):
+			
+			while True:
 
+				px = int(input(F'enter the row number of bloc {i} (0-{self.board_size-1}) : '))
+				py = ord(input(F'enter the column letter of bloc {i} (A-{chr(self.board_size + 64)}) : ')) - 65
+
+				if self.is_valid(px, py):
+					self.current_state[px][py] = '+'
+					break
+				else:
+					print('The position is not valid! Try again.')
+			
+					
 	def get_lineup_size(self):
 		while True: 
 			try:
@@ -56,17 +79,18 @@ class Game:
 				else:
 					print ("Out of range... Try again!")
 	
+
+	
 	
 	def get_parameters(self):
-		self.get_board_size()
+		
 		self.get_bloc_amount()
+		self.get_bloc_positions()
 		self.get_lineup_size()
 			# print(self.board_size)
 		
 
 		
-
-	
 	def initialize_game(self):
 		# self.current_state = [['.','.','.'],
 				#			  ['.','.','.'],
@@ -85,14 +109,6 @@ class Game:
 				print(F'{self.current_state[x][y]}', end="")
 			print()
 		print()
-		
-	def is_valid(self, px, py):
-		if px < 0 or px > self.board_size-1 or py < 0 or py > self.board_size-1:
-			return False
-		elif self.current_state[px][py] != '.':
-			return False
-		else:
-			return True
 
 	def is_end(self):
 		# Vertical win
