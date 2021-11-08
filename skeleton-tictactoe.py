@@ -146,8 +146,7 @@ class Game:
 			# py = int(input('enter the y coordinate: '))
 
 			px = int(input(F'enter the row number (0-{self.board_size-1}) : '))
-			col = input(F'enter the column letter : ')
-			py = ord(col) - 65
+			py = ord(input(F'enter the column letter (A-{chr(self.board_size + 64)}) : ')) - 65
 			print(py)
 
 			if self.is_valid(px, py):
