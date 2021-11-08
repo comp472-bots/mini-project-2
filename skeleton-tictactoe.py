@@ -173,7 +173,7 @@ class Game:
 		
 		self.get_board_size()
 		self.current_state = [["." for i in range(self.board_size)] for i in range(self.board_size)]
-		
+		self.last_move = (None, None)
 		print(self.current_state)
 		# Player X always plays first
 		self.player_turn = 'X'
@@ -182,39 +182,44 @@ class Game:
 		print()
 		for x in range(0, self.board_size):
 			for y in range(0, self.board_size):
-				print(F'{self.current_state[x][y]}', end="")
+				print(F'{self.current_state[x][y]}', end=" ")
 			print()
 		print()
 
 	def is_end(self):
-		# Vertical win
-		for i in range(0, 3):
-			if (self.current_state[0][i] != '.' and
-				self.current_state[0][i] == self.current_state[1][i] and
-				self.current_state[1][i] == self.current_state[2][i]):
-				return self.current_state[0][i]
-		# Horizontal win
-		for i in range(0, 3):
-			if (self.current_state[i] == ['X', 'X', 'X']):
-				return 'X'
-			elif (self.current_state[i] == ['O', 'O', 'O']):
-				return 'O'
-		# Main diagonal win
-		if (self.current_state[0][0] != '.' and
-			self.current_state[0][0] == self.current_state[1][1] and
-			self.current_state[0][0] == self.current_state[2][2]):
-			return self.current_state[0][0]
-		# Second diagonal win
-		if (self.current_state[0][2] != '.' and
-			self.current_state[0][2] == self.current_state[1][1] and
-			self.current_state[0][2] == self.current_state[2][0]):
-			return self.current_state[0][2]
+		if self.last_move == (None, None):
+			return None
+
+		row, col = self.last_move
+		item = self.current_state[row][col]
+		rows = len(self.current_state)
+		cols = len(self.current_state[0])
+
+		for delta_row, delta_col in [(1, 0), (0, 1), (1, 1), (1, -1)]:
+			consecutive_items = 1
+			for delta in (1, -1):
+				delta_row *= delta
+				delta_col *= delta
+				next_row = row + delta_row
+				next_col = col + delta_col
+
+				while 0 <= next_row < rows and 0 <= next_col < cols:
+					if self.current_state[next_row][next_col] == item:
+						consecutive_items += 1
+					else:
+						break
+					if consecutive_items == self.lineup_size:
+						return self.current_state[next_row][next_col]
+					next_row += delta_row
+					next_col += delta_col
+
 		# Is whole board full?
-		for i in range(0, 3):
-			for j in range(0, 3):
+		for i in range(0, rows):
+			for j in range(0, cols):
 				# There's an empty field, we continue the game
 				if (self.current_state[i][j] == '.'):
 					return None
+
 		# It's a tie!
 		return '.'
 
@@ -383,16 +388,16 @@ class Game:
 			if self.check_end():
 				return
 			start = time.time()
-			if self.search_type == self.MINIMAX:
-				if self.player_turn == 'X':
-					(_, x, y) = self.minimax(max=False)
-				else:
-					(_, x, y) = self.minimax(max=True)
-			else: # search_type == self.ALPHABETA
-				if self.player_turn == 'X':
-					(m, x, y) = self.alphabeta(max=False)
-				else:
-					(m, x, y) = self.alphabeta(max=True)
+			# if self.search_type == self.MINIMAX:
+			# 	if self.player_turn == 'X':
+			# 		(_, x, y) = self.minimax(max=False)
+			# 	else:
+			# 		(_, x, y) = self.minimax(max=True)
+			# else: # search_type == self.ALPHABETA
+			# 	if self.player_turn == 'X':
+			# 		(m, x, y) = self.alphabeta(max=False)
+			# 	else:
+			# 		(m, x, y) = self.alphabeta(max=True)
 			end = time.time()
 			if (self.player_turn == 'X' and self.player_x == self.HUMAN) or (self.player_turn == 'O' and self.player_o == self.HUMAN):
 					if self.recommend:
@@ -403,10 +408,11 @@ class Game:
 						print(F'Evaluation time: {round(end - start, 7)}s')
 						print(F'Player {self.player_turn} under AI control plays: x = {x}, y = {y}')
 			self.current_state[x][y] = self.player_turn
+			self.last_move = (x, y)
 			self.switch_player()
 
 def main():
-	g = Game(recommend=True)
+	g = Game(recommend=False)
 	g.play()
 	# g.play(player_x=Game.AI,player_o=Game.HUMAN)
 
