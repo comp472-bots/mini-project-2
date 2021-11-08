@@ -407,8 +407,8 @@ class Game:
 
 def main():
 	g = Game(recommend=True)
-	g.play(player_x=Game.AI,player_o=Game.AI)
-	g.play(player_x=Game.AI,player_o=Game.HUMAN)
+	g.play()
+	# g.play(player_x=Game.AI,player_o=Game.HUMAN)
 
 if __name__ == "__main__":
 	main()
