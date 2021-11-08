@@ -128,6 +128,34 @@ class Game:
 					return
 				else:
 					print ("Incorrect value... Try again!")
+	
+	def get_play_mode(self):
+		while True:
+			try:
+				self.play_mode = int(input("Enter (1) to use H-H, \n enter (2) to use H-AI, \n enter (3) to use AI-H, \n enter (4) to use AI-AI: "))
+			except ValueError: 
+				print ("That's not a number!")
+				continue
+			else:
+				if  self.play_mode == 1:
+					self.player_x = self.HUMAN
+					self.player_o = self.HUMAN
+					return
+				elif self.play_mode == 2:
+					self.player_x = self.HUMAN
+					self.player_o = self.AI
+					return
+				elif self.play_mode == 3:
+					self.player_x = self.AI
+					self.player_o = self.HUMAN
+					return
+				elif self.play_mode == 4:
+					self.player_x = self.AI
+					self.player_o = self.AI
+					return
+				else:
+					print ("Incorrect value... Try again!")
+	
 
 	def get_parameters(self):
 		
@@ -138,6 +166,7 @@ class Game:
 		self.get_max_depth_p2()
 		self.get_max_allowed_time()
 		self.get_search_type()
+		self.get_play_mode()
 		
 		
 	def initialize_game(self):
@@ -311,7 +340,7 @@ class Game:
 						if value < beta:
 							beta = value
 		return (value, x, y)
-
+	'''
 	def play(self,algo=None,player_x=None,player_o=None):
 		if algo == None:
 			algo = self.ALPHABETA
@@ -345,11 +374,41 @@ class Game:
 						print(F'Player {self.player_turn} under AI control plays: x = {x}, y = {y}')
 			self.current_state[x][y] = self.player_turn
 			self.switch_player()
+	'''	
+
+	def play(self):
+		
+		while True:
+			self.draw_board()
+			if self.check_end():
+				return
+			start = time.time()
+			if self.search_type == self.MINIMAX:
+				if self.player_turn == 'X':
+					(_, x, y) = self.minimax(max=False)
+				else:
+					(_, x, y) = self.minimax(max=True)
+			else: # search_type == self.ALPHABETA
+				if self.player_turn == 'X':
+					(m, x, y) = self.alphabeta(max=False)
+				else:
+					(m, x, y) = self.alphabeta(max=True)
+			end = time.time()
+			if (self.player_turn == 'X' and self.player_x == self.HUMAN) or (self.player_turn == 'O' and self.player_o == self.HUMAN):
+					if self.recommend:
+						print(F'Evaluation time: {round(end - start, 7)}s')
+						print(F'Recommended move: x = {x}, y = {y}')
+					(x,y) = self.input_move()
+			if (self.player_turn == 'X' and self.player_x == self.AI) or (self.player_turn == 'O' and self.player_o == self.AI):
+						print(F'Evaluation time: {round(end - start, 7)}s')
+						print(F'Player {self.player_turn} under AI control plays: x = {x}, y = {y}')
+			self.current_state[x][y] = self.player_turn
+			self.switch_player()
 
 def main():
 	g = Game(recommend=True)
-	g.play(algo=Game.ALPHABETA,player_x=Game.AI,player_o=Game.AI)
-	g.play(algo=Game.MINIMAX,player_x=Game.AI,player_o=Game.HUMAN)
+	g.play(player_x=Game.AI,player_o=Game.AI)
+	g.play(player_x=Game.AI,player_o=Game.HUMAN)
 
 if __name__ == "__main__":
 	main()
