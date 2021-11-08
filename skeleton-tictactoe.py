@@ -9,7 +9,7 @@ class Game:
 	AI = 3
 	
 	def __init__(self, recommend = True):
-		self.get_board_size()
+		
 		self.initialize_game()
 		self.get_parameters()
 		self.recommend = recommend
@@ -22,7 +22,7 @@ class Game:
 				print ("That's not a number!")
 				continue
 			else:
-				self.board_size = int(self.board_size)
+				
 				if  3 <= self.board_size <= 10:
 					return
 				else:
@@ -36,7 +36,6 @@ class Game:
 				print ("That's not a number!")
 				continue
 			else:
-				self.bloc_amount = int(self.bloc_amount)
 				if  0 <= self.bloc_amount <= 2 * self.board_size:
 					return
 				else:
@@ -73,29 +72,77 @@ class Game:
 				print ("That's not a number!")
 				continue
 			else:
-				self.lineup_size = int(self.lineup_size)
 				if  3 <= self.lineup_size <= self.board_size:
 					return
 				else:
 					print ("Out of range... Try again!")
-	
 
+	def get_max_depth_p1(self):
+		while True: 
+			try:
+				self.max_depth_p1 = int(input("Enter maximum depth of adversarial search for player 1: "))
+			except ValueError: 
+				print ("That's not a number!")
+				continue
+			else:
+				if  1 <= self.max_depth_p1:
+					return
+				else:
+					print ("Out of range... Try again!")
 	
+	def get_max_depth_p2(self):
+		while True: 
+			try:
+				self.max_depth_p2 = int(input("Enter maximum depth of adversarial search for player 2: "))
+			except ValueError: 
+				print ("That's not a number!")
+				continue
+			else:
+				if  1 <= self.max_depth_p2:
+					return
+				else:
+					print ("Out of range... Try again!")
 	
+	def get_max_allowed_time(self):
+		while True: 
+			try:
+				self.max_allowed_time = int(input("Enter maximum allowed time for program to make a move: "))
+			except ValueError: 
+				print ("That's not a number!")
+				continue
+			else:
+				if  1 <= self.max_allowed_time:
+					return
+				else:
+					print ("Out of range... Try again!")
+	
+	def get_search_type(self):
+		while True: 
+			try:
+				self.search_type = input("Enter (1) to use alphabeta, enter (0) to use minimax: ")
+			except ValueError: 
+				print ("That's not a number!")
+				continue
+			else:
+				if  self.search_type == 0 or 1:
+					return
+				else:
+					print ("Incorrect value... Try again!")
+
 	def get_parameters(self):
 		
 		self.get_bloc_amount()
 		self.get_bloc_positions()
 		self.get_lineup_size()
-			# print(self.board_size)
+		self.get_max_depth_p1()
+		self.get_max_depth_p2()
+		self.get_max_allowed_time()
+		self.get_search_type()
 		
-
 		
 	def initialize_game(self):
-		# self.current_state = [['.','.','.'],
-				#			  ['.','.','.'],
-				#			  ['.','.','.']]
-
+		
+		self.get_board_size()
 		self.current_state = [["." for i in range(self.board_size)] for i in range(self.board_size)]
 		
 		print(self.current_state)
