@@ -1,12 +1,16 @@
 # based on code from https://stackabuse.com/minimax-and-alpha-beta-pruning-in-python
 
 import time
+import random
+import sys
 
 class Game:
 	MINIMAX = 0
 	ALPHABETA = 1
 	HUMAN = 2
 	AI = 3
+
+	INFINITY = sys.maxsize
 	
 	def __init__(self, recommend = True):
 		
@@ -258,42 +262,53 @@ class Game:
 			self.player_turn = 'X'
 		return self.player_turn
 
-	def minimax(self, max=False):
+	def e1(self):
+		return random.randint(0, 100)
+
+	def minimax(self, max=False, max_depth=4, depth=0):
 		# Minimizing for 'X' and maximizing for 'O'
 		# Possible values are:
 		# -1 - win for 'X'
 		# 0  - a tie
 		# 1  - loss for 'X'
 		# We're initially setting it to 2 or -2 as worse than the worst case:
-		value = 2
+		value = self.INFINITY
 		if max:
-			value = -2
+			value = -self.INFINITY
 		x = None
 		y = None
 		result = self.is_end()
 		if result == 'X':
-			return (-1, x, y)
+			return (-10000, x, y)
 		elif result == 'O':
-			return (1, x, y)
+			return (10000, x, y)
 		elif result == '.':
 			return (0, x, y)
+		
+		# TODO
 		# if time > alloted
 		# return
-		for i in range(0, 3):
-			for j in range(0, 3):
+		
+		# If we reach (depth == max_depth) --> calcualte heuristic + return
+		elif depth == max_depth:
+			heuristic = self.e1()
+			return (heuristic, x, y)
+
+		for i in range(0, self.board_size):
+			for j in range(0, self.board_size):
 				temp = self.last_move
 				self.last_move = (i, j)
 				if self.current_state[i][j] == '.':
 					if max:
 						self.current_state[i][j] = 'O'
-						(v, _, _) = self.minimax(max=False)
+						(v, _, _) = self.minimax(max=False, max_depth=max_depth, depth=(depth+1))
 						if v > value:
 							value = v
 							x = i
 							y = j
 					else:
 						self.current_state[i][j] = 'X'
-						(v, _, _) = self.minimax(max=True)
+						(v, _, _) = self.minimax(max=True, max_depth=max_depth, depth=(depth+1))
 						if v < value:
 							value = v
 							x = i
@@ -321,8 +336,8 @@ class Game:
 			return (1, x, y)
 		elif result == '.':
 			return (0, x, y)
-		for i in range(0, 3):
-			for j in range(0, 3):
+		for i in range(0, self.board_size):
+			for j in range(0, self.board_size):
 				if self.current_state[i][j] == '.':
 					if max:
 						self.current_state[i][j] = 'O'
