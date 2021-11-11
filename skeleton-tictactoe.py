@@ -119,12 +119,12 @@ class Game:
 	def get_search_type(self):
 		while True: 
 			try:
-				self.search_type = input("Enter (1) to use alphabeta, enter (0) to use minimax: ")
+				self.search_type = int(input("Enter (1) to use alphabeta, enter (0) to use minimax: "))
 			except ValueError: 
 				print ("That's not a number!")
 				continue
 			else:
-				if  self.search_type == 0 or 1:
+				if  (self.search_type == 0) or (self.search_type == 1):
 					return
 				else:
 					print ("Incorrect value... Try again!")
@@ -277,8 +277,12 @@ class Game:
 			return (1, x, y)
 		elif result == '.':
 			return (0, x, y)
+		# if time > alloted
+		# return
 		for i in range(0, 3):
 			for j in range(0, 3):
+				temp = self.last_move
+				self.last_move = (i, j)
 				if self.current_state[i][j] == '.':
 					if max:
 						self.current_state[i][j] = 'O'
@@ -295,6 +299,7 @@ class Game:
 							x = i
 							y = j
 					self.current_state[i][j] = '.'
+					self.last_move = temp
 		return (value, x, y)
 
 	def alphabeta(self, alpha=-2, beta=2, max=False):
@@ -388,16 +393,16 @@ class Game:
 			if self.check_end():
 				return
 			start = time.time()
-			# if self.search_type == self.MINIMAX:
-			# 	if self.player_turn == 'X':
-			# 		(_, x, y) = self.minimax(max=False)
-			# 	else:
-			# 		(_, x, y) = self.minimax(max=True)
-			# else: # search_type == self.ALPHABETA
-			# 	if self.player_turn == 'X':
-			# 		(m, x, y) = self.alphabeta(max=False)
-			# 	else:
-			# 		(m, x, y) = self.alphabeta(max=True)
+			if self.search_type == self.MINIMAX:
+				if self.player_turn == 'X':
+					(_, x, y) = self.minimax(max=False)
+				else:
+					(_, x, y) = self.minimax(max=True)
+			else: # search_type == self.ALPHABETA
+				if self.player_turn == 'X':
+					(m, x, y) = self.alphabeta(max=False)
+				else:
+					(m, x, y) = self.alphabeta(max=True)
 			end = time.time()
 			if (self.player_turn == 'X' and self.player_x == self.HUMAN) or (self.player_turn == 'O' and self.player_o == self.HUMAN):
 					if self.recommend:
@@ -409,6 +414,7 @@ class Game:
 						print(F'Player {self.player_turn} under AI control plays: x = {x}, y = {y}')
 			self.current_state[x][y] = self.player_turn
 			self.last_move = (x, y)
+			print(self.last_move)
 			self.switch_player()
 
 def main():
