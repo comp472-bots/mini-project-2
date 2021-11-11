@@ -174,10 +174,10 @@ class Game:
 		
 		
 	def initialize_game(self):
-		
 		self.get_board_size()
 		self.current_state = [["." for i in range(self.board_size)] for i in range(self.board_size)]
 		self.last_move = (None, None)
+		self.total_moves = 0
 		print(self.current_state)
 		# Player X always plays first
 		self.player_turn = 'X'
@@ -217,15 +217,11 @@ class Game:
 					next_row += delta_row
 					next_col += delta_col
 
-		# Is whole board full?
-		for i in range(0, rows):
-			for j in range(0, cols):
-				# There's an empty field, we continue the game
-				if (self.current_state[i][j] == '.'):
-					return None
+		possible_moves = (self.board_size * self.board_size) - self.bloc_amount
+		if possible_moves == self.total_moves:
+			return "."
 
-		# It's a tie!
-		return '.'
+		return None
 
 	def check_end(self):
 		self.result = self.is_end()
@@ -297,8 +293,12 @@ class Game:
 		for i in range(0, self.board_size):
 			for j in range(0, self.board_size):
 				if self.current_state[i][j] == '.':
-					temp = self.last_move
+
+					temp_last_move = self.last_move
+					temp_total_moves = self.total_moves
 					self.last_move = (i, j)
+					self.total_moves += 1
+
 					if max:
 						self.current_state[i][j] = 'O'
 						(v, _, _) = self.minimax(max=False, max_depth=max_depth, depth=(depth+1))
@@ -313,8 +313,12 @@ class Game:
 							value = v
 							x = i
 							y = j
+
+					# Restore game state!
 					self.current_state[i][j] = '.'
-					self.last_move = temp
+					self.last_move = temp_last_move
+					self.total_moves = temp_total_moves
+
 		return (value, x, y)
 
 	def alphabeta(self, alpha=-sys.maxsize, beta=sys.maxsize, max=False, max_depth=4, depth=0):
@@ -349,8 +353,12 @@ class Game:
 		for i in range(0, self.board_size):
 			for j in range(0, self.board_size):
 				if self.current_state[i][j] == '.':
-					temp = self.last_move
+
+					temp_last_move = self.last_move
+					temp_total_moves = self.total_moves
 					self.last_move = (i, j)
+					self.total_moves += 1
+
 					if max:
 						self.current_state[i][j] = 'O'
 						(v, _, _) = self.alphabeta(alpha, beta, max=False, max_depth=max_depth, depth=(depth+1))
@@ -365,8 +373,12 @@ class Game:
 							value = v
 							x = i
 							y = j
+
+					# Restore game state!
 					self.current_state[i][j] = '.'
-					self.last_move = temp
+					self.last_move = temp_last_move
+					self.total_moves = temp_total_moves
+
 					if max: 
 						if value >= beta:
 							return (value, x, y)
@@ -442,6 +454,7 @@ class Game:
 						print(F'Player {self.player_turn} under AI control plays: x = {x}, y = {y}')
 			self.current_state[x][y] = self.player_turn
 			self.last_move = (x, y)
+			self.total_moves += 1
 			print(self.last_move)
 			self.switch_player()
 
