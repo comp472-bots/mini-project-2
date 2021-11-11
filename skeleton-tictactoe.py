@@ -1,12 +1,16 @@
 # based on code from https://stackabuse.com/minimax-and-alpha-beta-pruning-in-python
 
 import time
+import random
+import sys
 
 class Game:
 	MINIMAX = 0
 	ALPHABETA = 1
 	HUMAN = 2
 	AI = 3
+
+	INFINITY = sys.maxsize
 	
 	def __init__(self, recommend = True):
 		
@@ -119,12 +123,12 @@ class Game:
 	def get_search_type(self):
 		while True: 
 			try:
-				self.search_type = input("Enter (1) to use alphabeta, enter (0) to use minimax: ")
+				self.search_type = int(input("Enter (1) to use alphabeta, enter (0) to use minimax: "))
 			except ValueError: 
 				print ("That's not a number!")
 				continue
 			else:
-				if  self.search_type == 0 or 1:
+				if  (self.search_type == 0) or (self.search_type == 1):
 					return
 				else:
 					print ("Incorrect value... Try again!")
@@ -170,10 +174,10 @@ class Game:
 		
 		
 	def initialize_game(self):
-		
 		self.get_board_size()
 		self.current_state = [["." for i in range(self.board_size)] for i in range(self.board_size)]
 		self.last_move = (None, None)
+		self.total_moves = 0
 		print(self.current_state)
 		# Player X always plays first
 		self.player_turn = 'X'
@@ -213,15 +217,11 @@ class Game:
 					next_row += delta_row
 					next_col += delta_col
 
-		# Is whole board full?
-		for i in range(0, rows):
-			for j in range(0, cols):
-				# There's an empty field, we continue the game
-				if (self.current_state[i][j] == '.'):
-					return None
+		possible_moves = (self.board_size * self.board_size) - self.bloc_amount
+		if possible_moves == self.total_moves:
+			return "."
 
-		# It's a tie!
-		return '.'
+		return None
 
 	def check_end(self):
 		self.result = self.is_end()
@@ -258,82 +258,127 @@ class Game:
 			self.player_turn = 'X'
 		return self.player_turn
 
-	def minimax(self, max=False):
+	def e1(self):
+		return random.randint(0, 100)
+
+	def minimax(self, max=False, max_depth=4, depth=0):
 		# Minimizing for 'X' and maximizing for 'O'
 		# Possible values are:
 		# -1 - win for 'X'
 		# 0  - a tie
 		# 1  - loss for 'X'
 		# We're initially setting it to 2 or -2 as worse than the worst case:
-		value = 2
+		value = self.INFINITY
 		if max:
-			value = -2
+			value = -self.INFINITY
 		x = None
 		y = None
 		result = self.is_end()
 		if result == 'X':
-			return (-1, x, y)
+			return (-10000, x, y)
 		elif result == 'O':
-			return (1, x, y)
+			return (10000, x, y)
 		elif result == '.':
 			return (0, x, y)
-		for i in range(0, 3):
-			for j in range(0, 3):
+		
+		# TODO
+		# if time > alloted
+		# return
+		
+		# If we reach (depth == max_depth) --> calcualte heuristic + return
+		elif depth == max_depth:
+			heuristic = self.e1()
+			return (heuristic, x, y)
+
+		for i in range(0, self.board_size):
+			for j in range(0, self.board_size):
 				if self.current_state[i][j] == '.':
+
+					temp_last_move = self.last_move
+					temp_total_moves = self.total_moves
+					self.last_move = (i, j)
+					self.total_moves += 1
+
 					if max:
 						self.current_state[i][j] = 'O'
-						(v, _, _) = self.minimax(max=False)
+						(v, _, _) = self.minimax(max=False, max_depth=max_depth, depth=(depth+1))
 						if v > value:
 							value = v
 							x = i
 							y = j
 					else:
 						self.current_state[i][j] = 'X'
-						(v, _, _) = self.minimax(max=True)
+						(v, _, _) = self.minimax(max=True, max_depth=max_depth, depth=(depth+1))
 						if v < value:
 							value = v
 							x = i
 							y = j
+
+					# Restore game state!
 					self.current_state[i][j] = '.'
+					self.last_move = temp_last_move
+					self.total_moves = temp_total_moves
+
 		return (value, x, y)
 
-	def alphabeta(self, alpha=-2, beta=2, max=False):
+	def alphabeta(self, alpha=-sys.maxsize, beta=sys.maxsize, max=False, max_depth=4, depth=0):
 		# Minimizing for 'X' and maximizing for 'O'
 		# Possible values are:
 		# -1 - win for 'X'
 		# 0  - a tie
 		# 1  - loss for 'X'
 		# We're initially setting it to 2 or -2 as worse than the worst case:
-		value = 2
+		value = self.INFINITY
 		if max:
-			value = -2
+			value = -self.INFINITY
 		x = None
 		y = None
 		result = self.is_end()
 		if result == 'X':
-			return (-1, x, y)
+			return (-10000, x, y)
 		elif result == 'O':
-			return (1, x, y)
+			return (10000, x, y)
 		elif result == '.':
 			return (0, x, y)
-		for i in range(0, 3):
-			for j in range(0, 3):
+
+		# TODO
+		# if time > alloted
+		# return
+		
+		# If we reach (depth == max_depth) --> calcualte heuristic + return
+		elif depth == max_depth:
+			heuristic = self.e1()
+			return (heuristic, x, y)
+
+		for i in range(0, self.board_size):
+			for j in range(0, self.board_size):
 				if self.current_state[i][j] == '.':
+
+					temp_last_move = self.last_move
+					temp_total_moves = self.total_moves
+					self.last_move = (i, j)
+					self.total_moves += 1
+
 					if max:
 						self.current_state[i][j] = 'O'
-						(v, _, _) = self.alphabeta(alpha, beta, max=False)
+						(v, _, _) = self.alphabeta(alpha, beta, max=False, max_depth=max_depth, depth=(depth+1))
 						if v > value:
 							value = v
 							x = i
 							y = j
 					else:
 						self.current_state[i][j] = 'X'
-						(v, _, _) = self.alphabeta(alpha, beta, max=True)
+						(v, _, _) = self.alphabeta(alpha, beta, max=True, max_depth=max_depth, depth=(depth+1))
 						if v < value:
 							value = v
 							x = i
 							y = j
+
+					# Restore game state!
 					self.current_state[i][j] = '.'
+					self.last_move = temp_last_move
+					self.total_moves = temp_total_moves
+
 					if max: 
 						if value >= beta:
 							return (value, x, y)
@@ -388,16 +433,16 @@ class Game:
 			if self.check_end():
 				return
 			start = time.time()
-			# if self.search_type == self.MINIMAX:
-			# 	if self.player_turn == 'X':
-			# 		(_, x, y) = self.minimax(max=False)
-			# 	else:
-			# 		(_, x, y) = self.minimax(max=True)
-			# else: # search_type == self.ALPHABETA
-			# 	if self.player_turn == 'X':
-			# 		(m, x, y) = self.alphabeta(max=False)
-			# 	else:
-			# 		(m, x, y) = self.alphabeta(max=True)
+			if self.search_type == self.MINIMAX:
+				if self.player_turn == 'X':
+					(_, x, y) = self.minimax(max=False)
+				else:
+					(_, x, y) = self.minimax(max=True)
+			else: # search_type == self.ALPHABETA
+				if self.player_turn == 'X':
+					(m, x, y) = self.alphabeta(max=False)
+				else:
+					(m, x, y) = self.alphabeta(max=True)
 			end = time.time()
 			if (self.player_turn == 'X' and self.player_x == self.HUMAN) or (self.player_turn == 'O' and self.player_o == self.HUMAN):
 					if self.recommend:
@@ -409,6 +454,8 @@ class Game:
 						print(F'Player {self.player_turn} under AI control plays: x = {x}, y = {y}')
 			self.current_state[x][y] = self.player_turn
 			self.last_move = (x, y)
+			self.total_moves += 1
+			print(self.last_move)
 			self.switch_player()
 
 def main():
