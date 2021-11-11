@@ -296,9 +296,9 @@ class Game:
 
 		for i in range(0, self.board_size):
 			for j in range(0, self.board_size):
-				temp = self.last_move
-				self.last_move = (i, j)
 				if self.current_state[i][j] == '.':
+					temp = self.last_move
+					self.last_move = (i, j)
 					if max:
 						self.current_state[i][j] = 'O'
 						(v, _, _) = self.minimax(max=False, max_depth=max_depth, depth=(depth+1))
@@ -317,43 +317,56 @@ class Game:
 					self.last_move = temp
 		return (value, x, y)
 
-	def alphabeta(self, alpha=-2, beta=2, max=False):
+	def alphabeta(self, alpha=-sys.maxsize, beta=sys.maxsize, max=False, max_depth=4, depth=0):
 		# Minimizing for 'X' and maximizing for 'O'
 		# Possible values are:
 		# -1 - win for 'X'
 		# 0  - a tie
 		# 1  - loss for 'X'
 		# We're initially setting it to 2 or -2 as worse than the worst case:
-		value = 2
+		value = self.INFINITY
 		if max:
-			value = -2
+			value = -self.INFINITY
 		x = None
 		y = None
 		result = self.is_end()
 		if result == 'X':
-			return (-1, x, y)
+			return (-10000, x, y)
 		elif result == 'O':
-			return (1, x, y)
+			return (10000, x, y)
 		elif result == '.':
 			return (0, x, y)
+
+		# TODO
+		# if time > alloted
+		# return
+		
+		# If we reach (depth == max_depth) --> calcualte heuristic + return
+		elif depth == max_depth:
+			heuristic = self.e1()
+			return (heuristic, x, y)
+
 		for i in range(0, self.board_size):
 			for j in range(0, self.board_size):
 				if self.current_state[i][j] == '.':
+					temp = self.last_move
+					self.last_move = (i, j)
 					if max:
 						self.current_state[i][j] = 'O'
-						(v, _, _) = self.alphabeta(alpha, beta, max=False)
+						(v, _, _) = self.alphabeta(alpha, beta, max=False, max_depth=max_depth, depth=(depth+1))
 						if v > value:
 							value = v
 							x = i
 							y = j
 					else:
 						self.current_state[i][j] = 'X'
-						(v, _, _) = self.alphabeta(alpha, beta, max=True)
+						(v, _, _) = self.alphabeta(alpha, beta, max=True, max_depth=max_depth, depth=(depth+1))
 						if v < value:
 							value = v
 							x = i
 							y = j
 					self.current_state[i][j] = '.'
+					self.last_move = temp
 					if max: 
 						if value >= beta:
 							return (value, x, y)
