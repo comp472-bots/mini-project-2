@@ -11,6 +11,8 @@ class Game:
 	AI = 3
 
 	INFINITY = sys.maxsize
+	MAX = 10**12
+	MIN = -10**12
 	
 	def __init__(self, recommend = True):
 		
@@ -341,7 +343,50 @@ class Game:
 								break
 
 		return score
-				
+
+	def e3(self, max):
+
+		rows = self.board_size
+		cols = self.board_size
+
+		score = 0
+
+		for row in range(rows):
+			for col in range(cols):
+				item = self.current_state[row][col]
+				if item == 'X' or item == 'O':
+					for delta_row, delta_col in [(1, 0), (0, 1), (1, 1), (1, -1)]:
+						consecutive_items = 1
+						open_positions = 0
+						stop = False
+						for delta in (1, -1):
+							delta_row *= delta
+							delta_col *= delta
+							next_row = row + delta_row
+							next_col = col + delta_col
+
+							while (0 <= next_row < rows) and (0 <= next_col < cols) and (not stop):
+								if self.current_state[next_row][next_col] == item:
+									consecutive_items += 1
+								elif self.current_state[next_row][next_col] == '.':
+									open_positions += 1
+								else:
+									break
+								if (consecutive_items + open_positions) == self.lineup_size:
+									if (item == 'X'):
+										score -= 10**(consecutive_items)
+									elif (item == 'O'):
+										score += 10**(consecutive_items)
+									
+									stop = True
+									break
+								next_row += delta_row
+								next_col += delta_col
+
+							if stop:
+								break
+
+		return score
 
 	def minimax(self, max=False, max_depth=4, depth=0):
 		# Minimizing for 'X' and maximizing for 'O'
@@ -357,9 +402,9 @@ class Game:
 		y = None
 		result = self.is_end()
 		if result == 'X':
-			return (-100000000, x, y)
+			return (self.MIN, x, y)
 		elif result == 'O':
-			return (100000000, x, y)
+			return (self.MAX, x, y)
 		elif result == '.':
 			return (0, x, y)
 		
@@ -403,7 +448,7 @@ class Game:
 
 		return (value, x, y)
 
-	def alphabeta(self, alpha=-sys.maxsize, beta=sys.maxsize, max=False, max_depth=6, depth=0, max_time=0):
+	def alphabeta(self, alpha=-sys.maxsize, beta=sys.maxsize, max=False, max_depth=6, depth=0, max_time=0, algo=1):
 		# Minimizing for 'X' and maximizing for 'O'
 		# Possible values are:
 		# -1 - win for 'X'
@@ -417,25 +462,23 @@ class Game:
 		y = None
 		result = self.is_end()
 		if result == 'X':
-			return (-100000000, x, y)
+			return (self.MIN, x, y)
 		elif result == 'O':
-			return (100000000, x, y)
+			return (self.MAX, x, y)
 		elif result == '.':
 			return (0, x, y)
 
-		# TODO
-		# if time > alloted
-		# return
 		# If we're approaching the maximum allowed time, make a decision!
 		elif ((time.time() + 0.1 * self.max_allowed_time) > max_time):
-			heuristic = self.e2(max=max)
+			heuristic = self.e2(max=max) if algo == 1 else self.e3(max=max)
 			return (heuristic, x, y)
 		
-		# If we reach (depth == max_depth) --> calcualte heuristic + return
+		# If we reach (depth == max_depth) --> calcualte heuristic + and return
 		elif depth == max_depth:
-			heuristic = self.e2(max=max)
+			heuristic = self.e2(max=max) if algo == 1 else self.e3(max=max)
 			return (heuristic, x, y)
 
+		# Otherwise, generate game tree
 		for i in range(0, self.board_size):
 			for j in range(0, self.board_size):
 				if self.current_state[i][j] == '.':
@@ -447,14 +490,14 @@ class Game:
 
 					if max:
 						self.current_state[i][j] = 'O'
-						(v, _, _) = self.alphabeta(alpha, beta, max=False, max_depth=max_depth, depth=(depth+1), max_time=max_time)
+						(v, _, _) = self.alphabeta(alpha, beta, max=False, max_depth=max_depth, depth=(depth+1), max_time=max_time, algo=algo)
 						if v > value:
 							value = v
 							x = i
 							y = j
 					else:
 						self.current_state[i][j] = 'X'
-						(v, _, _) = self.alphabeta(alpha, beta, max=True, max_depth=max_depth, depth=(depth+1), max_time=max_time)
+						(v, _, _) = self.alphabeta(alpha, beta, max=True, max_depth=max_depth, depth=(depth+1), max_time=max_time, algo=algo)
 						if v < value:
 							value = v
 							x = i
@@ -527,7 +570,7 @@ class Game:
 					(_, x, y) = self.minimax(max=True)
 			else: # search_type == self.ALPHABETA
 				if self.player_turn == 'X':
-					(m, x, y) = self.alphabeta(max=False, max_time=cutoff_time)
+					(m, x, y) = self.alphabeta(max=False, max_time=cutoff_time, algo=2)
 				else:
 					(m, x, y) = self.alphabeta(max=True, max_time=cutoff_time)
 				print("Heuristic score:", m)
