@@ -179,6 +179,7 @@ class Game:
 		self.generate_chance_matrix()
 		self.last_move = (None, None)
 		self.total_moves = 0
+		self.heuristic_score = 0
 		print(self.current_state)
 		# Player X always plays first
 		self.player_turn = 'X'
@@ -268,23 +269,21 @@ class Game:
 		rows = self.board_size
 		cols = self.board_size
 
-		chance_matrix = [[None for i in range(self.board_size)] for i in range(self.board_size)]
+		self.chance_matrix = [[None for i in range(self.board_size)] for i in range(self.board_size)]
 
 		for row in range(rows):
 			for col in range(cols):
 				
-				max1 =  abs(((rows-1)/2) - row)
-				max2 = abs(((cols-1)/2) - col)
+				row_diff =  abs(((rows-1)/2) - row)
+				col_diff = abs(((cols-1)/2) - col)
 
-				#big_value = 1/(max(max1,max2)+1)
-				big_value = 1/(max(max1,max2)+1)
-				chance_matrix[row][col] = int(big_value*100)
-				#chance_matrix[row][col] = int(pow(big_value,20))
-
+				max_value = 1/(max(row_diff,col_diff)+1)
+				self.chance_matrix[row][col] = int(max_value*100)
+				
 		print()
 		for row in range(rows):
 			for col in range(cols):
-				print(F'{chance_matrix[row][col]}', end=" ")
+				print(F'{self.chance_matrix[row][col]}', end=" ")
 			print()
 		print()
 		
@@ -497,9 +496,16 @@ class Game:
 			if (self.player_turn == 'X' and self.player_x == self.AI) or (self.player_turn == 'O' and self.player_o == self.AI):
 						print(F'Evaluation time: {round(end - start, 7)}s')
 						print(F'Player {self.player_turn} under AI control plays: x = {x}, y = {y}')
+			
+			if self.player_turn == 'X':
+				self.heuristic_score -= self.chance_matrix[x][y]
+			else:
+				self.heuristic_score += self.chance_matrix[x][y]
+			print(self.heuristic_score)
 			self.current_state[x][y] = self.player_turn
 			self.last_move = (x, y)
 			self.total_moves += 1
+			
 			print(self.last_move)
 			self.switch_player()
 
