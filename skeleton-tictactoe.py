@@ -176,6 +176,7 @@ class Game:
 	def initialize_game(self):
 		self.get_board_size()
 		self.current_state = [["." for i in range(self.board_size)] for i in range(self.board_size)]
+		self.generate_chance_matrix()
 		self.last_move = (None, None)
 		self.total_moves = 0
 		print(self.current_state)
@@ -259,7 +260,50 @@ class Game:
 		return self.player_turn
 
 	def e1(self):
+
 		return random.randint(0, 100)
+
+	def generate_chance_matrix(self):
+
+		rows = self.board_size
+		cols = self.board_size
+
+		chance_matrix = [[None for i in range(self.board_size)] for i in range(self.board_size)]
+
+		for row in range(rows):
+			for col in range(cols):
+				
+				max1 =  abs(((rows-1)/2) - row)
+				max2 = abs(((cols-1)/2) - col)
+
+				big_value = max(max1,max2)
+				chance_matrix[row][col] = big_value
+				#chance_matrix[row][col] = int(pow(big_value,20))
+
+		print()
+		for row in range(rows):
+			for col in range(cols):
+				print(F'{chance_matrix[row][col]}', end=" ")
+			print()
+		print()
+		
+
+
+	
+	#def e2(self):
+
+		#for i in range(0, self.board_size):
+		
+		#score = 0
+
+
+
+
+		#for i in range(0,4):
+		#	score += 1
+
+		#print(score)
+
 
 	def minimax(self, max=False, max_depth=4, depth=0):
 		# Minimizing for 'X' and maximizing for 'O'
@@ -459,6 +503,7 @@ class Game:
 			self.switch_player()
 
 def main():
+	
 	g = Game(recommend=False)
 	g.play()
 	# g.play(player_x=Game.AI,player_o=Game.HUMAN)
