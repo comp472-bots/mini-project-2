@@ -258,8 +258,90 @@ class Game:
 			self.player_turn = 'X'
 		return self.player_turn
 
-	def e1(self):
-		return random.randint(0, 100)
+	def e1(self, max):
+		if self.last_move == (None, None):
+			return None
+
+		row, col = self.last_move
+		item = self.current_state[row][col]
+		rows = self.board_size
+		cols = self.board_size
+
+		score = 0
+		for delta_row, delta_col in [(1, 0), (0, 1), (1, 1), (1, -1)]:
+			consecutive_items = 1
+			open_positions = 0
+			stop = False
+			for delta in (1, -1):
+				delta_row *= delta
+				delta_col *= delta
+				next_row = row + delta_row
+				next_col = col + delta_col
+
+				while (0 <= next_row < rows) and (0 <= next_col < cols) and (not stop):
+					if self.current_state[next_row][next_col] == item:
+						consecutive_items += 1
+					elif self.current_state[next_row][next_col] == '.':
+						open_positions += 1
+					else:
+						break
+					if (consecutive_items + open_positions) == self.lineup_size:
+						# score += 1
+						score += consecutive_items**6
+						stop = True
+						break
+					next_row += delta_row
+					next_col += delta_col
+
+				if stop:
+					break
+
+		return score if max else -score
+
+	def e2(self, max):
+
+		rows = self.board_size
+		cols = self.board_size
+
+		score = 0
+
+		for row in range(rows):
+			for col in range(cols):
+				item = self.current_state[row][col]
+				if item == 'X' or item == 'O':
+					for delta_row, delta_col in [(1, 0), (0, 1), (1, 1), (1, -1)]:
+						consecutive_items = 1
+						open_positions = 0
+						stop = False
+						for delta in (1, -1):
+							delta_row *= delta
+							delta_col *= delta
+							next_row = row + delta_row
+							next_col = col + delta_col
+
+							while (0 <= next_row < rows) and (0 <= next_col < cols) and (not stop):
+								if self.current_state[next_row][next_col] == item:
+									consecutive_items += 1
+								elif self.current_state[next_row][next_col] == '.':
+									open_positions += 1
+								else:
+									break
+								if (consecutive_items + open_positions) == self.lineup_size:
+									if (item == 'X'):
+										score -= 1
+									elif (item == 'O'):
+										score += 1
+									
+									stop = True
+									break
+								next_row += delta_row
+								next_col += delta_col
+
+							if stop:
+								break
+
+		return score
+				
 
 	def minimax(self, max=False, max_depth=4, depth=0):
 		# Minimizing for 'X' and maximizing for 'O'
@@ -275,9 +357,9 @@ class Game:
 		y = None
 		result = self.is_end()
 		if result == 'X':
-			return (-10000, x, y)
+			return (-100000000, x, y)
 		elif result == 'O':
-			return (10000, x, y)
+			return (100000000, x, y)
 		elif result == '.':
 			return (0, x, y)
 		
@@ -287,7 +369,7 @@ class Game:
 		
 		# If we reach (depth == max_depth) --> calcualte heuristic + return
 		elif depth == max_depth:
-			heuristic = self.e1()
+			heuristic = self.e2(max=max)
 			return (heuristic, x, y)
 
 		for i in range(0, self.board_size):
@@ -335,9 +417,9 @@ class Game:
 		y = None
 		result = self.is_end()
 		if result == 'X':
-			return (-10000, x, y)
+			return (-100000000, x, y)
 		elif result == 'O':
-			return (10000, x, y)
+			return (100000000, x, y)
 		elif result == '.':
 			return (0, x, y)
 
@@ -347,7 +429,7 @@ class Game:
 		
 		# If we reach (depth == max_depth) --> calcualte heuristic + return
 		elif depth == max_depth:
-			heuristic = self.e1()
+			heuristic = self.e2(max=max)
 			return (heuristic, x, y)
 
 		for i in range(0, self.board_size):
@@ -443,6 +525,7 @@ class Game:
 					(m, x, y) = self.alphabeta(max=False)
 				else:
 					(m, x, y) = self.alphabeta(max=True)
+				print("Heuristic score:", m)
 			end = time.time()
 			if (self.player_turn == 'X' and self.player_x == self.HUMAN) or (self.player_turn == 'O' and self.player_o == self.HUMAN):
 					if self.recommend:
