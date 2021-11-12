@@ -403,7 +403,7 @@ class Game:
 
 		return (value, x, y)
 
-	def alphabeta(self, alpha=-sys.maxsize, beta=sys.maxsize, max=False, max_depth=4, depth=0):
+	def alphabeta(self, alpha=-sys.maxsize, beta=sys.maxsize, max=False, max_depth=6, depth=0, max_time=0):
 		# Minimizing for 'X' and maximizing for 'O'
 		# Possible values are:
 		# -1 - win for 'X'
@@ -426,6 +426,10 @@ class Game:
 		# TODO
 		# if time > alloted
 		# return
+		# If we're approaching the maximum allowed time, make a decision!
+		elif ((time.time() + 0.1 * self.max_allowed_time) > max_time):
+			heuristic = self.e2(max=max)
+			return (heuristic, x, y)
 		
 		# If we reach (depth == max_depth) --> calcualte heuristic + return
 		elif depth == max_depth:
@@ -443,14 +447,14 @@ class Game:
 
 					if max:
 						self.current_state[i][j] = 'O'
-						(v, _, _) = self.alphabeta(alpha, beta, max=False, max_depth=max_depth, depth=(depth+1))
+						(v, _, _) = self.alphabeta(alpha, beta, max=False, max_depth=max_depth, depth=(depth+1), max_time=max_time)
 						if v > value:
 							value = v
 							x = i
 							y = j
 					else:
 						self.current_state[i][j] = 'X'
-						(v, _, _) = self.alphabeta(alpha, beta, max=True, max_depth=max_depth, depth=(depth+1))
+						(v, _, _) = self.alphabeta(alpha, beta, max=True, max_depth=max_depth, depth=(depth+1), max_time=max_time)
 						if v < value:
 							value = v
 							x = i
@@ -515,6 +519,7 @@ class Game:
 			if self.check_end():
 				return
 			start = time.time()
+			cutoff_time = start + 5
 			if self.search_type == self.MINIMAX:
 				if self.player_turn == 'X':
 					(_, x, y) = self.minimax(max=False)
@@ -522,9 +527,9 @@ class Game:
 					(_, x, y) = self.minimax(max=True)
 			else: # search_type == self.ALPHABETA
 				if self.player_turn == 'X':
-					(m, x, y) = self.alphabeta(max=False)
+					(m, x, y) = self.alphabeta(max=False, max_time=cutoff_time)
 				else:
-					(m, x, y) = self.alphabeta(max=True)
+					(m, x, y) = self.alphabeta(max=True, max_time=cutoff_time)
 				print("Heuristic score:", m)
 			end = time.time()
 			if (self.player_turn == 'X' and self.player_x == self.HUMAN) or (self.player_turn == 'O' and self.player_o == self.HUMAN):
