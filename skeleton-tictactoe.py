@@ -276,8 +276,9 @@ class Game:
 				max1 =  abs(((rows-1)/2) - row)
 				max2 = abs(((cols-1)/2) - col)
 
-				big_value = max(max1,max2)
-				chance_matrix[row][col] = big_value
+				#big_value = 1/(max(max1,max2)+1)
+				big_value = 1/(max(max1,max2)+1)
+				chance_matrix[row][col] = int(big_value*100)
 				#chance_matrix[row][col] = int(pow(big_value,20))
 
 		print()
