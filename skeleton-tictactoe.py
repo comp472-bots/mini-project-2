@@ -340,11 +340,13 @@ class Game:
 
 					temp_last_move = self.last_move
 					temp_total_moves = self.total_moves
+					temp_heuristic_score = self.heuristic_score
 					self.last_move = (i, j)
 					self.total_moves += 1
 
 					if max:
 						self.current_state[i][j] = 'O'
+						self.heuristic_score += self.chance_matrix[i][j]
 						(v, _, _) = self.minimax(max=False, max_depth=max_depth, depth=(depth+1))
 						if v > value:
 							value = v
@@ -352,6 +354,7 @@ class Game:
 							y = j
 					else:
 						self.current_state[i][j] = 'X'
+						self.heuristic_score -= self.chance_matrix[i][j]
 						(v, _, _) = self.minimax(max=True, max_depth=max_depth, depth=(depth+1))
 						if v < value:
 							value = v
@@ -362,6 +365,7 @@ class Game:
 					self.current_state[i][j] = '.'
 					self.last_move = temp_last_move
 					self.total_moves = temp_total_moves
+					self.heuristic_score = temp_heuristic_score
 
 		return (value, x, y)
 
@@ -391,7 +395,8 @@ class Game:
 		
 		# If we reach (depth == max_depth) --> calcualte heuristic + return
 		elif depth == max_depth:
-			heuristic = self.e1()
+			#heuristic = self.e1()
+			heuristic = self.heuristic_score
 			return (heuristic, x, y)
 
 		for i in range(0, self.board_size):
@@ -400,11 +405,13 @@ class Game:
 
 					temp_last_move = self.last_move
 					temp_total_moves = self.total_moves
+					temp_heuristic_score = self.heuristic_score
 					self.last_move = (i, j)
 					self.total_moves += 1
 
 					if max:
 						self.current_state[i][j] = 'O'
+						self.heuristic_score += self.chance_matrix[i][j]
 						(v, _, _) = self.alphabeta(alpha, beta, max=False, max_depth=max_depth, depth=(depth+1))
 						if v > value:
 							value = v
@@ -412,6 +419,7 @@ class Game:
 							y = j
 					else:
 						self.current_state[i][j] = 'X'
+						self.heuristic_score -= self.chance_matrix[i][j]
 						(v, _, _) = self.alphabeta(alpha, beta, max=True, max_depth=max_depth, depth=(depth+1))
 						if v < value:
 							value = v
@@ -422,6 +430,7 @@ class Game:
 					self.current_state[i][j] = '.'
 					self.last_move = temp_last_move
 					self.total_moves = temp_total_moves
+					self.heuristic_score = temp_heuristic_score
 
 					if max: 
 						if value >= beta:
