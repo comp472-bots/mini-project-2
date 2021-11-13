@@ -62,7 +62,7 @@ class Game:
 				py = ord(input(F'enter the column letter of bloc {i} (A-{chr(self.board_size + 64)}) : ')) - 65
 
 				if self.is_valid(px, py):
-					self.current_state[px][py] = '+'
+					self.current_state[px][py] = '*'
 					break
 				else:
 					print('The position is not valid! Try again.')
@@ -186,6 +186,8 @@ class Game:
 
 	def draw_board(self):
 		
+		print(F'(move #{self.total_moves})')
+
 		print("   ", end=" ")
 		for x in range(1, self.board_size+1):
 			print(chr(x + 64),"", end="")
@@ -514,8 +516,8 @@ class Game:
 					(x,y) = self.input_move()
 			if (self.player_turn == 'X' and self.player_x == self.AI) or (self.player_turn == 'O' and self.player_o == self.AI):
 						print(F'Evaluation time: {round(end - start, 7)}s')
-						print(F'Player {self.player_turn} under AI control plays: x = {x}, y = {y}')
-			
+						#print(F'Player {self.player_turn} under AI control plays: x = {x}, y = {y}')
+						print(F'Player {self.player_turn} under AI control plays: {chr(y + 65)}{x}')
 			if self.player_turn == 'X':
 				self.heuristic_score -= self.chance_matrix[x][y]
 			else:
