@@ -185,8 +185,18 @@ class Game:
 		self.player_turn = 'X'
 
 	def draw_board(self):
+		
+		print("   ", end=" ")
+		for x in range(1, self.board_size+1):
+			print(chr(x + 64),"", end="")
+
+		print("\n  + ",end="")
+		for x in range(0, self.board_size):
+			print("-","", end="")
+
 		print()
 		for x in range(0, self.board_size):
+			print(x, "|", end=" ")
 			for y in range(0, self.board_size):
 				print(F'{self.current_state[x][y]}', end=" ")
 			print()
