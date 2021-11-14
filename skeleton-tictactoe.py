@@ -10,7 +10,7 @@ class Game:
 	HUMAN = 2
 	AI = 3
 
-	INFINITY = sys.maxsize
+	INFINITY = 10**14
 	MAX = 10**12
 	MIN = -10**12
 	
@@ -465,12 +465,12 @@ class Game:
 		
 		# If we're approaching the maximum allowed time, make a decision!
 		elif ((time.time() + 0.1 * self.max_allowed_time) > max_time):
-			heuristic = self.e2(max=max) if algo == 1 else self.e3(max=max)
+			heuristic = self.heuristic_score if algo == 1 else self.e3(max=max)
 			return (heuristic, x, y)
 		
 		# If we reach (depth == max_depth) --> calcualte heuristic + and return
 		elif depth == max_depth:
-			heuristic = self.e2(max=max) if algo == 1 else self.e3(max=max)
+			heuristic = self.heuristic_score if algo == 1 else self.e3(max=max)
 			return (heuristic, x, y)
 
 		# Otherwise, generate game tree
@@ -531,12 +531,12 @@ class Game:
 
 		# If we're approaching the maximum allowed time, make a decision!
 		elif ((time.time() + 0.1 * self.max_allowed_time) > max_time):
-			heuristic = self.e2(max=max) if algo == 1 else self.e3(max=max)
+			heuristic = self.heuristic_score if algo == 1 else self.e3(max=max)
 			return (heuristic, x, y)
 		
 		# If we reach (depth == max_depth) --> calcualte heuristic + and return
 		elif depth == max_depth:
-			heuristic = self.e2(max=max) if algo == 1 else self.e3(max=max)
+			heuristic = self.heuristic_score if algo == 1 else self.e3(max=max)
 			return (heuristic, x, y)
 
 		# Otherwise, generate game tree
@@ -627,18 +627,17 @@ class Game:
 			if self.check_end():
 				return
 			start = time.time()
-			cutoff_time = start + 5
+			cutoff_time = start + self.max_allowed_time
 			if self.search_type == self.MINIMAX:
 				if self.player_turn == 'X':
-					(_, x, y) = self.minimax(max=False, max_time=cutoff_time, algo=2)
+					(_, x, y) = self.minimax(max=False, max_time=cutoff_time, algo=1, max_depth=self.max_depth_p1)
 				else:
-					(_, x, y) = self.minimax(max=True, max_time=cutoff_time)
+					(_, x, y) = self.minimax(max=True, max_time=cutoff_time, algo=2, max_depth=self.max_depth_p2)
 			else: # search_type == self.ALPHABETA
 				if self.player_turn == 'X':
-					(m, x, y) = self.alphabeta(max=False, max_time=cutoff_time, algo=2)
+					(m, x, y) = self.alphabeta(max=False, max_time=cutoff_time, algo=1, max_depth=self.max_depth_p1)
 				else:
-					(m, x, y) = self.alphabeta(max=True, max_time=cutoff_time)
-				print("Heuristic score:", m)
+					(m, x, y) = self.alphabeta(max=True, max_time=cutoff_time, algo=2, max_depth=self.max_depth_p2)
 			end = time.time()
 			if (self.player_turn == 'X' and self.player_x == self.HUMAN) or (self.player_turn == 'O' and self.player_o == self.HUMAN):
 					if self.recommend:
@@ -653,12 +652,10 @@ class Game:
 				self.heuristic_score -= self.chance_matrix[x][y]
 			else:
 				self.heuristic_score += self.chance_matrix[x][y]
-			print(self.heuristic_score)
+
 			self.current_state[x][y] = self.player_turn
 			self.last_move = (x, y)
 			self.total_moves += 1
-			
-			print(self.last_move)
 			self.switch_player()
 
 def main():
