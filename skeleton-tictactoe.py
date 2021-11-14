@@ -388,7 +388,7 @@ class Game:
 
 		return score
 
-	def minimax(self, max=False, max_depth=4, depth=0):
+	def minimax(self, max=False, max_depth=6, depth=0, max_time=0, algo=1):
 		# Minimizing for 'X' and maximizing for 'O'
 		# Possible values are:
 		# -1 - win for 'X'
@@ -408,15 +408,17 @@ class Game:
 		elif result == '.':
 			return (0, x, y)
 		
-		# TODO
-		# if time > alloted
-		# return
+		# If we're approaching the maximum allowed time, make a decision!
+		elif ((time.time() + 0.1 * self.max_allowed_time) > max_time):
+			heuristic = self.e2(max=max) if algo == 1 else self.e3(max=max)
+			return (heuristic, x, y)
 		
-		# If we reach (depth == max_depth) --> calcualte heuristic + return
+		# If we reach (depth == max_depth) --> calcualte heuristic + and return
 		elif depth == max_depth:
-			heuristic = self.e2(max=max)
+			heuristic = self.e2(max=max) if algo == 1 else self.e3(max=max)
 			return (heuristic, x, y)
 
+		# Otherwise, generate game tree
 		for i in range(0, self.board_size):
 			for j in range(0, self.board_size):
 				if self.current_state[i][j] == '.':
@@ -428,14 +430,14 @@ class Game:
 
 					if max:
 						self.current_state[i][j] = 'O'
-						(v, _, _) = self.minimax(max=False, max_depth=max_depth, depth=(depth+1))
+						(v, _, _) = self.minimax(max=False, max_depth=max_depth, depth=(depth+1), max_time=max_time, algo=algo)
 						if v > value:
 							value = v
 							x = i
 							y = j
 					else:
 						self.current_state[i][j] = 'X'
-						(v, _, _) = self.minimax(max=True, max_depth=max_depth, depth=(depth+1))
+						(v, _, _) = self.minimax(max=True, max_depth=max_depth, depth=(depth+1), max_time=max_time, algo=algo)
 						if v < value:
 							value = v
 							x = i
@@ -565,9 +567,9 @@ class Game:
 			cutoff_time = start + 5
 			if self.search_type == self.MINIMAX:
 				if self.player_turn == 'X':
-					(_, x, y) = self.minimax(max=False)
+					(_, x, y) = self.minimax(max=False, max_time=cutoff_time, algo=2)
 				else:
-					(_, x, y) = self.minimax(max=True)
+					(_, x, y) = self.minimax(max=True, max_time=cutoff_time)
 			else: # search_type == self.ALPHABETA
 				if self.player_turn == 'X':
 					(m, x, y) = self.alphabeta(max=False, max_time=cutoff_time, algo=2)
