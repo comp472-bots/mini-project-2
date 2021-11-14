@@ -64,7 +64,7 @@ class Game:
 				py = ord(input(F'enter the column letter of bloc {i} (A-{chr(self.board_size + 64)}) : ')) - 65
 
 				if self.is_valid(px, py):
-					self.current_state[px][py] = '+'
+					self.current_state[px][py] = '*'
 					break
 				else:
 					print('The position is not valid! Try again.')
@@ -178,15 +178,29 @@ class Game:
 	def initialize_game(self):
 		self.get_board_size()
 		self.current_state = [["." for i in range(self.board_size)] for i in range(self.board_size)]
+		self.generate_chance_matrix()
 		self.last_move = (None, None)
 		self.total_moves = 0
+		self.heuristic_score = 0
 		print(self.current_state)
 		# Player X always plays first
 		self.player_turn = 'X'
 
 	def draw_board(self):
+		
+		print(F'(move #{self.total_moves})')
+
+		print("   ", end=" ")
+		for x in range(1, self.board_size+1):
+			print(chr(x + 64),"", end="")
+
+		print("\n  + ",end="")
+		for x in range(0, self.board_size):
+			print("-","", end="")
+
 		print()
 		for x in range(0, self.board_size):
+			print(x, "|", end=" ")
 			for y in range(0, self.board_size):
 				print(F'{self.current_state[x][y]}', end=" ")
 			print()
@@ -388,6 +402,47 @@ class Game:
 
 		return score
 
+	def generate_chance_matrix(self):
+
+		rows = self.board_size
+		cols = self.board_size
+
+		self.chance_matrix = [[None for i in range(self.board_size)] for i in range(self.board_size)]
+
+		for row in range(rows):
+			for col in range(cols):
+				
+				row_diff =  abs(((rows-1)/2) - row)
+				col_diff = abs(((cols-1)/2) - col)
+
+				max_value = 1/(max(row_diff,col_diff)+1)
+				self.chance_matrix[row][col] = int(max_value*100)
+				
+		print()
+		for row in range(rows):
+			for col in range(cols):
+				print(F'{self.chance_matrix[row][col]}', end=" ")
+			print()
+		print()
+		
+
+
+	
+	#def e2(self):
+
+		#for i in range(0, self.board_size):
+		
+		#score = 0
+
+
+
+
+		#for i in range(0,4):
+		#	score += 1
+
+		#print(score)
+
+
 	def minimax(self, max=False, max_depth=6, depth=0, max_time=0, algo=1):
 		# Minimizing for 'X' and maximizing for 'O'
 		# Possible values are:
@@ -425,11 +480,13 @@ class Game:
 
 					temp_last_move = self.last_move
 					temp_total_moves = self.total_moves
+					temp_heuristic_score = self.heuristic_score
 					self.last_move = (i, j)
 					self.total_moves += 1
 
 					if max:
 						self.current_state[i][j] = 'O'
+						self.heuristic_score += self.chance_matrix[i][j]
 						(v, _, _) = self.minimax(max=False, max_depth=max_depth, depth=(depth+1), max_time=max_time, algo=algo)
 						if v > value:
 							value = v
@@ -437,6 +494,7 @@ class Game:
 							y = j
 					else:
 						self.current_state[i][j] = 'X'
+						self.heuristic_score -= self.chance_matrix[i][j]
 						(v, _, _) = self.minimax(max=True, max_depth=max_depth, depth=(depth+1), max_time=max_time, algo=algo)
 						if v < value:
 							value = v
@@ -447,6 +505,7 @@ class Game:
 					self.current_state[i][j] = '.'
 					self.last_move = temp_last_move
 					self.total_moves = temp_total_moves
+					self.heuristic_score = temp_heuristic_score
 
 		return (value, x, y)
 
@@ -487,11 +546,13 @@ class Game:
 
 					temp_last_move = self.last_move
 					temp_total_moves = self.total_moves
+					temp_heuristic_score = self.heuristic_score
 					self.last_move = (i, j)
 					self.total_moves += 1
 
 					if max:
 						self.current_state[i][j] = 'O'
+						self.heuristic_score += self.chance_matrix[i][j]
 						(v, _, _) = self.alphabeta(alpha, beta, max=False, max_depth=max_depth, depth=(depth+1), max_time=max_time, algo=algo)
 						if v > value:
 							value = v
@@ -499,6 +560,7 @@ class Game:
 							y = j
 					else:
 						self.current_state[i][j] = 'X'
+						self.heuristic_score -= self.chance_matrix[i][j]
 						(v, _, _) = self.alphabeta(alpha, beta, max=True, max_depth=max_depth, depth=(depth+1), max_time=max_time, algo=algo)
 						if v < value:
 							value = v
@@ -509,6 +571,7 @@ class Game:
 					self.current_state[i][j] = '.'
 					self.last_move = temp_last_move
 					self.total_moves = temp_total_moves
+					self.heuristic_score = temp_heuristic_score
 
 					if max: 
 						if value >= beta:
@@ -584,14 +647,22 @@ class Game:
 					(x,y) = self.input_move()
 			if (self.player_turn == 'X' and self.player_x == self.AI) or (self.player_turn == 'O' and self.player_o == self.AI):
 						print(F'Evaluation time: {round(end - start, 7)}s')
-						print(F'Player {self.player_turn} under AI control plays: x = {x}, y = {y}')
+						#print(F'Player {self.player_turn} under AI control plays: x = {x}, y = {y}')
+						print(F'Player {self.player_turn} under AI control plays: {chr(y + 65)}{x}')
+			if self.player_turn == 'X':
+				self.heuristic_score -= self.chance_matrix[x][y]
+			else:
+				self.heuristic_score += self.chance_matrix[x][y]
+			print(self.heuristic_score)
 			self.current_state[x][y] = self.player_turn
 			self.last_move = (x, y)
 			self.total_moves += 1
+			
 			print(self.last_move)
 			self.switch_player()
 
 def main():
+	
 	g = Game(recommend=False)
 	g.play()
 	# g.play(player_x=Game.AI,player_o=Game.HUMAN)
