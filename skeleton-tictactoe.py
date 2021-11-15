@@ -425,8 +425,6 @@ class Game:
 			print()
 		print()
 		
-
-
 	
 	#def e2(self):
 
@@ -443,7 +441,13 @@ class Game:
 		#print(score)
 
 
-	def minimax(self, max=False, max_depth=6, depth=0, max_time=0, algo=1):
+	def increment_depth_dict(self, depth_dict, depth):
+		if depth in depth_dict:
+			depth_dict[depth] += 1
+		else:
+			depth_dict[depth] = 1
+
+	def minimax(self, max=False, max_depth=6, depth=0, max_time=0, algo=1, depth_dict=dict()):
 		# Minimizing for 'X' and maximizing for 'O'
 		# Possible values are:
 		# -1 - win for 'X'
@@ -457,21 +461,26 @@ class Game:
 		y = None
 		result = self.is_end()
 		if result == 'X':
-			return (self.MIN, x, y)
+			self.increment_depth_dict(depth_dict, depth)
+			return (self.MIN, x, y, depth_dict)
 		elif result == 'O':
-			return (self.MAX, x, y)
+			self.increment_depth_dict(depth_dict, depth)
+			return (self.MAX, x, y, depth_dict)
 		elif result == '.':
-			return (0, x, y)
+			self.increment_depth_dict(depth_dict, depth)
+			return (0, x, y, depth_dict)
 		
 		# If we're approaching the maximum allowed time, make a decision!
 		elif ((time.time() + 0.1 * self.max_allowed_time) > max_time):
+			self.increment_depth_dict(depth_dict, depth)
 			heuristic = self.heuristic_score if algo == 1 else self.e3(max=max)
-			return (heuristic, x, y)
+			return (heuristic, x, y, depth_dict)
 		
 		# If we reach (depth == max_depth) --> calcualte heuristic + and return
 		elif depth == max_depth:
+			self.increment_depth_dict(depth_dict, depth)
 			heuristic = self.heuristic_score if algo == 1 else self.e3(max=max)
-			return (heuristic, x, y)
+			return (heuristic, x, y, depth_dict)
 
 		# Otherwise, generate game tree
 		for i in range(0, self.board_size):
@@ -487,7 +496,7 @@ class Game:
 					if max:
 						self.current_state[i][j] = 'O'
 						self.heuristic_score += self.chance_matrix[i][j]
-						(v, _, _) = self.minimax(max=False, max_depth=max_depth, depth=(depth+1), max_time=max_time, algo=algo)
+						(v, _, _, _) = self.minimax(max=False, max_depth=max_depth, depth=(depth+1), max_time=max_time, algo=algo, depth_dict=depth_dict)
 						if v > value:
 							value = v
 							x = i
@@ -495,7 +504,7 @@ class Game:
 					else:
 						self.current_state[i][j] = 'X'
 						self.heuristic_score -= self.chance_matrix[i][j]
-						(v, _, _) = self.minimax(max=True, max_depth=max_depth, depth=(depth+1), max_time=max_time, algo=algo)
+						(v, _, _, _) = self.minimax(max=True, max_depth=max_depth, depth=(depth+1), max_time=max_time, algo=algo, depth_dict=depth_dict)
 						if v < value:
 							value = v
 							x = i
@@ -507,9 +516,9 @@ class Game:
 					self.total_moves = temp_total_moves
 					self.heuristic_score = temp_heuristic_score
 
-		return (value, x, y)
+		return (value, x, y, depth_dict)
 
-	def alphabeta(self, alpha=-sys.maxsize, beta=sys.maxsize, max=False, max_depth=6, depth=0, max_time=0, algo=1):
+	def alphabeta(self, alpha=-sys.maxsize, beta=sys.maxsize, max=False, max_depth=6, depth=0, max_time=0, algo=1, depth_dict=dict()):
 		# Minimizing for 'X' and maximizing for 'O'
 		# Possible values are:
 		# -1 - win for 'X'
@@ -523,21 +532,26 @@ class Game:
 		y = None
 		result = self.is_end()
 		if result == 'X':
-			return (self.MIN, x, y)
+			self.increment_depth_dict(depth_dict, depth)
+			return (self.MIN, x, y, depth_dict)
 		elif result == 'O':
-			return (self.MAX, x, y)
+			self.increment_depth_dict(depth_dict, depth)
+			return (self.MAX, x, y, depth_dict)
 		elif result == '.':
-			return (0, x, y)
+			self.increment_depth_dict(depth_dict, depth)
+			return (0, x, y, depth_dict)
 
 		# If we're approaching the maximum allowed time, make a decision!
 		elif ((time.time() + 0.1 * self.max_allowed_time) > max_time):
+			self.increment_depth_dict(depth_dict, depth)
 			heuristic = self.heuristic_score if algo == 1 else self.e3(max=max)
-			return (heuristic, x, y)
+			return (heuristic, x, y, depth_dict)
 		
 		# If we reach (depth == max_depth) --> calcualte heuristic + and return
 		elif depth == max_depth:
+			self.increment_depth_dict(depth_dict, depth)
 			heuristic = self.heuristic_score if algo == 1 else self.e3(max=max)
-			return (heuristic, x, y)
+			return (heuristic, x, y, depth_dict)
 
 		# Otherwise, generate game tree
 		for i in range(0, self.board_size):
@@ -553,7 +567,7 @@ class Game:
 					if max:
 						self.current_state[i][j] = 'O'
 						self.heuristic_score += self.chance_matrix[i][j]
-						(v, _, _) = self.alphabeta(alpha, beta, max=False, max_depth=max_depth, depth=(depth+1), max_time=max_time, algo=algo)
+						(v, _, _, _) = self.alphabeta(alpha, beta, max=False, max_depth=max_depth, depth=(depth+1), max_time=max_time, algo=algo, depth_dict=depth_dict)
 						if v > value:
 							value = v
 							x = i
@@ -561,7 +575,7 @@ class Game:
 					else:
 						self.current_state[i][j] = 'X'
 						self.heuristic_score -= self.chance_matrix[i][j]
-						(v, _, _) = self.alphabeta(alpha, beta, max=True, max_depth=max_depth, depth=(depth+1), max_time=max_time, algo=algo)
+						(v, _, _, _) = self.alphabeta(alpha, beta, max=True, max_depth=max_depth, depth=(depth+1), max_time=max_time, algo=algo, depth_dict=depth_dict)
 						if v < value:
 							value = v
 							x = i
@@ -575,15 +589,15 @@ class Game:
 
 					if max: 
 						if value >= beta:
-							return (value, x, y)
+							return (value, x, y, depth_dict)
 						if value > alpha:
 							alpha = value
 					else:
 						if value <= alpha:
-							return (value, x, y)
+							return (value, x, y, depth_dict)
 						if value < beta:
 							beta = value
-		return (value, x, y)
+		return (value, x, y, depth_dict)
 	'''
 	def play(self,algo=None,player_x=None,player_o=None):
 		if algo == None:
@@ -628,16 +642,17 @@ class Game:
 				return
 			start = time.time()
 			cutoff_time = start + self.max_allowed_time
+			depth_dict = dict()
 			if self.search_type == self.MINIMAX:
 				if self.player_turn == 'X':
-					(_, x, y) = self.minimax(max=False, max_time=cutoff_time, algo=1, max_depth=self.max_depth_p1)
+					(_, x, y, depth_dict) = self.minimax(max=False, max_time=cutoff_time, algo=1, max_depth=self.max_depth_p1, depth_dict=depth_dict)
 				else:
-					(_, x, y) = self.minimax(max=True, max_time=cutoff_time, algo=2, max_depth=self.max_depth_p2)
+					(_, x, y, depth_dict) = self.minimax(max=True, max_time=cutoff_time, algo=2, max_depth=self.max_depth_p2, depth_dict=depth_dict)
 			else: # search_type == self.ALPHABETA
 				if self.player_turn == 'X':
-					(m, x, y) = self.alphabeta(max=False, max_time=cutoff_time, algo=1, max_depth=self.max_depth_p1)
+					(m, x, y, depth_dict) = self.alphabeta(max=False, max_time=cutoff_time, algo=1, max_depth=self.max_depth_p1, depth_dict=depth_dict)
 				else:
-					(m, x, y) = self.alphabeta(max=True, max_time=cutoff_time, algo=2, max_depth=self.max_depth_p2)
+					(m, x, y, depth_dict) = self.alphabeta(max=True, max_time=cutoff_time, algo=2, max_depth=self.max_depth_p2, depth_dict=depth_dict)
 			end = time.time()
 			if (self.player_turn == 'X' and self.player_x == self.HUMAN) or (self.player_turn == 'O' and self.player_o == self.HUMAN):
 					if self.recommend:
@@ -652,11 +667,13 @@ class Game:
 				self.heuristic_score -= self.chance_matrix[x][y]
 			else:
 				self.heuristic_score += self.chance_matrix[x][y]
-
 			self.current_state[x][y] = self.player_turn
 			self.last_move = (x, y)
 			self.total_moves += 1
 			self.switch_player()
+
+			print("Total heuristic evaluations: ", sum(depth_dict.values()))
+			print("Evaluations by depth: ", depth_dict)
 
 def main():
 	
