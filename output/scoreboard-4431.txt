@@ -4,7 +4,7 @@
 Total wins for 'X': 10 (100.0%)
 Total wins for 'O': 0 (0.0%)
 Total ties: 0 (0.0%)
-i Average evaluation time: 0.03427269714285714
+i Average evaluation time: 0.022943657142857142
 ii Total heuristic evaluations: 147700
 iii Evaluations by depth: {6: 137470, 5: 8330, 4: 1440, 3: 330, 2: 100, 1: 30}
 iv Average evaluation depth: 5.913676371022342

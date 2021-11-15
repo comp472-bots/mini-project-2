@@ -5,7 +5,7 @@
 2|. . . . 
 3|* . . * 
 
-Evaluation time: 0.5276189s
+Evaluation time: 0.6492951s
 Player X under AI control plays: B1
 Total heuristic evaluations: 634176
 Evaluations by depth: {6: 628992, 5: 5184}
@@ -20,7 +20,7 @@ Average recursion depth: 5.945454545454545
 2|. . . . 
 3|* . . * 
 
-Evaluation time: 0.970407s
+Evaluation time: 1.0911078s
 Player O under AI control plays: B0
 Total heuristic evaluations: 292380
 Evaluations by depth: {6: 289512, 4: 720, 5: 2148}
@@ -35,7 +35,7 @@ Average recursion depth: 5.779437229437229
 2|. . . . 
 3|* . . * 
 
-Evaluation time: 0.1176839s
+Evaluation time: 0.1146901s
 Player X under AI control plays: C0
 Total heuristic evaluations: 108792
 Evaluations by depth: {5: 6504, 6: 102120, 3: 64, 4: 104}
@@ -50,7 +50,7 @@ Average recursion depth: 5.476984126984126
 2|. . . . 
 3|* . . * 
 
-Evaluation time: 0.0807829s
+Evaluation time: 0.105747s
 Player O under AI control plays: A1
 Total heuristic evaluations: 36504
 Evaluations by depth: {4: 656, 6: 34704, 5: 1124, 2: 8, 3: 12}
@@ -65,7 +65,7 @@ Average recursion depth: 4.975925925925926
 2|. . . . 
 3|* . . * 
 
-Evaluation time: 0.0090048s
+Evaluation time: 0.008975s
 Player X under AI control plays: C1
 Total heuristic evaluations: 8515
 Evaluations by depth: {3: 78, 5: 1888, 6: 6480, 4: 68, 1: 1}
@@ -80,7 +80,7 @@ Average recursion depth: 4.316666666666666
 2|. . . . 
 3|* . . * 
 
-Evaluation time: 0.0050192s
+Evaluation time: 0.0029929s
 Player O under AI control plays: D1
 Total heuristic evaluations: 1358
 Evaluations by depth: {2: 18, 4: 268, 6: 960, 5: 108, 3: 4}
@@ -95,7 +95,7 @@ Average recursion depth: 3.547619047619048
 2|. . . . 
 3|* . . * 
 
-Evaluation time: 0.0009971s
+Evaluation time: 0.000999s
 Player X under AI control plays: A2
 Total heuristic evaluations: 266
 Evaluations by depth: {1: 2, 3: 40, 5: 148, 6: 60, 4: 16}
@@ -112,7 +112,7 @@ Average recursion depth: 3.038888888888889
 
 
 The winner is X!
-6(b)i Average evaluation time: 0.24450197142857144
+6(b)i Average evaluation time: 0.2819724142857143
 6(b)ii Total heuristic evaluations: 1081991
 6(b)iii Evaluations by depth: {6: 1062828, 5: 17104, 4: 1832, 3: 198, 2: 26, 1: 3}
 6(b)iv Average evaluation depth: 5.980146784954774

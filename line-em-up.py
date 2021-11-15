@@ -523,41 +523,6 @@ class Game:
 
 		ard = sum_children_ard / num_children
 		return (value, x, y, depth_dict, ard)
-	'''
-	def play(self,algo=None,player_x=None,player_o=None):
-		if algo == None:
-			algo = self.ALPHABETA
-		if player_x == None:
-			player_x = self.HUMAN
-		if player_o == None:
-			player_o = self.HUMAN
-		while True:
-			self.draw_board()
-			if self.check_end():
-				return
-			start = time.time()
-			if algo == self.MINIMAX:
-				if self.player_turn == 'X':
-					(_, x, y) = self.minimax(max=False)
-				else:
-					(_, x, y) = self.minimax(max=True)
-			else: # algo == self.ALPHABETA
-				if self.player_turn == 'X':
-					(m, x, y) = self.alphabeta(max=False)
-				else:
-					(m, x, y) = self.alphabeta(max=True)
-			end = time.time()
-			if (self.player_turn == 'X' and player_x == self.HUMAN) or (self.player_turn == 'O' and player_o == self.HUMAN):
-					if self.recommend:
-						print(F'Evaluation time: {round(end - start, 7)}s')
-						print(F'Recommended move: x = {x}, y = {y}')
-					(x,y) = self.input_move()
-			if (self.player_turn == 'X' and player_x == self.AI) or (self.player_turn == 'O' and player_o == self.AI):
-						print(F'Evaluation time: {round(end - start, 7)}s')
-						print(F'Player {self.player_turn} under AI control plays: x = {x}, y = {y}')
-			self.current_state[x][y] = self.player_turn
-			self.switch_player()
-	'''	
 
 	def calclulate_avg_per_move_depth(self, depth_dict):
 		numerator = 0
@@ -643,7 +608,6 @@ class Game:
 					(x,y) = self.input_move()
 			if (self.player_turn == 'X' and self.player_x == self.AI) or (self.player_turn == 'O' and self.player_o == self.AI):
 						print(F'Evaluation time: {round(end - start, 7)}s')
-						#print(F'Player {self.player_turn} under AI control plays: x = {x}, y = {y}')
 						print(F'Player {self.player_turn} under AI control plays: {chr(y + 65)}{x}')
 			if self.player_turn == 'X':
 				self.heuristic_score -= self.chance_matrix[x][y]
@@ -838,16 +802,16 @@ def main():
 		g.write_test_configuration(5,4,4,5,6,6,True,[(4,3),(1,3),(3,0),(2,3)])
 		
 		#Configuration #5 
-		g.write_test_configuration(8,5,5,1,2,6,True,[(2,7),(3,4),(5,1),(0,6)])
+		g.write_test_configuration(8,5,5,1,2,6,True,[(2,7),(3,4),(5,1),(0,6),(0, 0)])
 		
 		#Configuration #6 
-		g.write_test_configuration(8,5,5,5,2,6,True,[(3,2),(1,6),(7,3),(2,5)])
+		g.write_test_configuration(8,5,5,5,2,6,True,[(3,2),(1,6),(7,3),(2,5),(1,0)])
 		
 		#Configuration #7 
-		g.write_test_configuration(8,6,5,1,6,6,True,[(7,3),(6,2),(5,4),(2,3)])
+		g.write_test_configuration(8,6,5,1,6,6,True,[(7,3),(6,2),(5,4),(2,3),(0,7),(1,2)])
 		
 		#Configuration 8 
-		g.write_test_configuration(8,6,5,5,6,6,True,[(1,4),(2,3),(5,3),(3,3)])
+		g.write_test_configuration(8,6,5,5,6,6,True,[(1,4),(2,3),(5,3),(3,3),(7,0),(6,2)])
 
 if __name__ == "__main__":
 	main()
