@@ -188,7 +188,7 @@ class Game:
 
 	def draw_board(self):
 		
-		print(F'(move #{self.total_moves})')
+		if self.total_moves != 0: print(F'\n(move #{self.total_moves})\n')
 
 		print("   ", end=" ")
 		for x in range(1, self.board_size+1):
@@ -717,7 +717,6 @@ class Game:
 		self.last_move = (None, None)
 		self.total_moves = 0
 		self.heuristic_score = 0
-		#print(self.current_state)
 		# Player X always plays first
 		self.player_turn = 'X'
 
@@ -770,6 +769,8 @@ def main():
 	
 	g = Game(recommend=False)
 	g.play()
+	
+	for 
 	g.replay(4,4,3,5,6,6,False,[(0,0),(0,3),(3,0),(3,3)])
 	# g.play(player_x=Game.AI,player_o=Game.HUMAN)
 
