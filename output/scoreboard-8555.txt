@@ -1,0 +1,12 @@
+
+
+10 games
+Total wins for 'X': 10 (100.0%)
+Total wins for 'O': 0 (0.0%)
+Total ties: 0 (0.0%)
+i Average evaluation time: 2.1198565770588234
+ii Total heuristic evaluations: 55599723
+iii Evaluations by depth: {2: 82724, 6: 55507784, 5: 1027, 4: 2852, 3: 1325, 1: 4011}
+iv Average evaluation depth: 5.993495345291558
+v Average recursion depth: 1.0388235294117647
+vi Average moves per game: 17.0

@@ -1,0 +1,342 @@
+  A B C D E F G H 
+ +- - - - - - - - 
+0|. . . . . . . . 
+1|. . . . . . * . 
+2|. . . . . * . . 
+3|. . * . . . . . 
+4|. . . . . . . . 
+5|. . . . . . . . 
+6|. . . . . . . . 
+7|. . . * . . . . 
+
+Evaluation time: 0.0s
+Player X under AI control plays: D3
+Total heuristic evaluations: 1065
+Evaluations by depth: {2: 1065}
+Average evaluation depth:2.0
+Average recursion depth: 1.0666666666666667
+(move #1)
+
+  A B C D E F G H 
+ +- - - - - - - - 
+0|. . . . . . . . 
+1|. . . . . . * . 
+2|. . . . . * . . 
+3|. . * X . . . . 
+4|. . . . . . . . 
+5|. . . . . . . . 
+6|. . . . . . . . 
+7|. . . * . . . . 
+
+Evaluation time: 4.5017941s
+Player O under AI control plays: E2
+Total heuristic evaluations: 1095678
+Evaluations by depth: {6: 1095558, 5: 1, 4: 20, 3: 1, 2: 40, 1: 58}
+Average evaluation depth:5.999549137611598
+Average recursion depth: 1.018209441234988
+(move #2)
+
+  A B C D E F G H 
+ +- - - - - - - - 
+0|. . . . . . . . 
+1|. . . . . . * . 
+2|. . . . O * . . 
+3|. . * X . . . . 
+4|. . . . . . . . 
+5|. . . . . . . . 
+6|. . . . . . . . 
+7|. . . * . . . . 
+
+Evaluation time: 0.0009899s
+Player X under AI control plays: E3
+Total heuristic evaluations: 986
+Evaluations by depth: {2: 986}
+Average evaluation depth:2.0
+Average recursion depth: 1.0689655172413792
+(move #3)
+
+  A B C D E F G H 
+ +- - - - - - - - 
+0|. . . . . . . . 
+1|. . . . . . * . 
+2|. . . . O * . . 
+3|. . * X X . . . 
+4|. . . . . . . . 
+5|. . . . . . . . 
+6|. . . . . . . . 
+7|. . . * . . . . 
+
+Evaluation time: 4.501411s
+Player O under AI control plays: F3
+Total heuristic evaluations: 946762
+Evaluations by depth: {6: 946638, 4: 20, 3: 1, 2: 47, 1: 56}
+Average evaluation depth:5.999460265621138
+Average recursion depth: 1.017875612256612
+(move #4)
+
+  A B C D E F G H 
+ +- - - - - - - - 
+0|. . . . . . . . 
+1|. . . . . . * . 
+2|. . . . O * . . 
+3|. . * X X O . . 
+4|. . . . . . . . 
+5|. . . . . . . . 
+6|. . . . . . . . 
+7|. . . * . . . . 
+
+Evaluation time: 0.000994s
+Player X under AI control plays: D4
+Total heuristic evaluations: 1141
+Evaluations by depth: {2: 1141}
+Average evaluation depth:2.0
+Average recursion depth: 1.0714285714285714
+(move #5)
+
+  A B C D E F G H 
+ +- - - - - - - - 
+0|. . . . . . . . 
+1|. . . . . . * . 
+2|. . . . O * . . 
+3|. . * X X O . . 
+4|. . . X . . . . 
+5|. . . . . . . . 
+6|. . . . . . . . 
+7|. . . * . . . . 
+
+Evaluation time: 4.5021029s
+Player O under AI control plays: D1
+Total heuristic evaluations: 782478
+Evaluations by depth: {6: 782342, 5: 1, 4: 36, 2: 45, 1: 54}
+Average evaluation depth:5.9993316106011925
+Average recursion depth: 1.0192870680107085
+(move #6)
+
+  A B C D E F G H 
+ +- - - - - - - - 
+0|. . . . . . . . 
+1|. . . O . . * . 
+2|. . . . O * . . 
+3|. . * X X O . . 
+4|. . . X . . . . 
+5|. . . . . . . . 
+6|. . . . . . . . 
+7|. . . * . . . . 
+
+Evaluation time: 0.001992s
+Player X under AI control plays: E4
+Total heuristic evaluations: 886
+Evaluations by depth: {2: 886}
+Average evaluation depth:2.0
+Average recursion depth: 1.0740740740740742
+(move #7)
+
+  A B C D E F G H 
+ +- - - - - - - - 
+0|. . . . . . . . 
+1|. . . O . . * . 
+2|. . . . O * . . 
+3|. . * X X O . . 
+4|. . . X X . . . 
+5|. . . . . . . . 
+6|. . . . . . . . 
+7|. . . * . . . . 
+
+Evaluation time: 4.5029612s
+Player O under AI control plays: H5
+Total heuristic evaluations: 692249
+Evaluations by depth: {6: 692020, 5: 86, 4: 6, 3: 35, 2: 50, 1: 52}
+Average evaluation depth:5.999042252137598
+Average recursion depth: 1.0197099710711572
+(move #8)
+
+  A B C D E F G H 
+ +- - - - - - - - 
+0|. . . . . . . . 
+1|. . . O . . * . 
+2|. . . . O * . . 
+3|. . * X X O . . 
+4|. . . X X . . . 
+5|. . . . . . . O 
+6|. . . . . . . . 
+7|. . . * . . . . 
+
+Evaluation time: 0.0030079s
+Player X under AI control plays: G4
+Total heuristic evaluations: 1297
+Evaluations by depth: {2: 1297}
+Average evaluation depth:2.0
+Average recursion depth: 1.0384615384615385
+(move #9)
+
+  A B C D E F G H 
+ +- - - - - - - - 
+0|. . . . . . . . 
+1|. . . O . . * . 
+2|. . . . O * . . 
+3|. . * X X O . . 
+4|. . . X X . X . 
+5|. . . . . . . O 
+6|. . . . . . . . 
+7|. . . * . . . . 
+
+Evaluation time: 4.501219s
+Player O under AI control plays: F4
+Total heuristic evaluations: 601059
+Evaluations by depth: {6: 600935, 5: 1, 4: 10, 3: 14, 2: 49, 1: 50}
+Average evaluation depth:5.999153161336907
+Average recursion depth: 1.020027550027103
+(move #10)
+
+  A B C D E F G H 
+ +- - - - - - - - 
+0|. . . . . . . . 
+1|. . . O . . * . 
+2|. . . . O * . . 
+3|. . * X X O . . 
+4|. . . X X O X . 
+5|. . . . . . . O 
+6|. . . . . . . . 
+7|. . . * . . . . 
+
+Evaluation time: 0.0020041s
+Player X under AI control plays: C2
+Total heuristic evaluations: 608
+Evaluations by depth: {2: 608}
+Average evaluation depth:2.0
+Average recursion depth: 1.06
+(move #11)
+
+  A B C D E F G H 
+ +- - - - - - - - 
+0|. . . . . . . . 
+1|. . . O . . * . 
+2|. . X . O * . . 
+3|. . * X X O . . 
+4|. . . X X O X . 
+5|. . . . . . . O 
+6|. . . . . . . . 
+7|. . . * . . . . 
+
+Evaluation time: 4.5020161s
+Player O under AI control plays: F6
+Total heuristic evaluations: 565782
+Evaluations by depth: {6: 565621, 5: 21, 4: 27, 3: 18, 2: 47, 1: 48}
+Average evaluation depth:5.999015521879452
+Average recursion depth: 1.0208542444113013
+(move #12)
+
+  A B C D E F G H 
+ +- - - - - - - - 
+0|. . . . . . . . 
+1|. . . O . . * . 
+2|. . X . O * . . 
+3|. . * X X O . . 
+4|. . . X X O X . 
+5|. . . . . . . O 
+6|. . . . . O . . 
+7|. . . * . . . . 
+
+Evaluation time: 0.0020101s
+Player X under AI control plays: D2
+Total heuristic evaluations: 575
+Evaluations by depth: {2: 575}
+Average evaluation depth:2.0
+Average recursion depth: 1.0625
+(move #13)
+
+  A B C D E F G H 
+ +- - - - - - - - 
+0|. . . . . . . . 
+1|. . . O . . * . 
+2|. . X X O * . . 
+3|. . * X X O . . 
+4|. . . X X O X . 
+5|. . . . . . . O 
+6|. . . . . O . . 
+7|. . . * . . . . 
+
+Evaluation time: 4.502764s
+Player O under AI control plays: F7
+Total heuristic evaluations: 517800
+Evaluations by depth: {6: 517663, 5: 1, 4: 22, 3: 23, 2: 45, 1: 46}
+Average evaluation depth:5.998988026264967
+Average recursion depth: 1.021774643581003
+(move #14)
+
+  A B C D E F G H 
+ +- - - - - - - - 
+0|. . . . . . . . 
+1|. . . O . . * . 
+2|. . X X O * . . 
+3|. . * X X O . . 
+4|. . . X X O X . 
+5|. . . . . . . O 
+6|. . . . . O . . 
+7|. . . * . O . . 
+
+Evaluation time: 0.002995s
+Player X under AI control plays: F5
+Total heuristic evaluations: 1088
+Evaluations by depth: {2: 1088}
+Average evaluation depth:2.0
+Average recursion depth: 1.0434782608695652
+(move #15)
+
+  A B C D E F G H 
+ +- - - - - - - - 
+0|. . . . . . . . 
+1|. . . O . . * . 
+2|. . X X O * . . 
+3|. . * X X O . . 
+4|. . . X X O X . 
+5|. . . . . X . O 
+6|. . . . . O . . 
+7|. . . * . O . . 
+
+Evaluation time: 4.502013s
+Player O under AI control plays: D6
+Total heuristic evaluations: 497064
+Evaluations by depth: {6: 496842, 4: 106, 2: 38, 5: 1, 3: 42, 1: 35}
+Average evaluation depth:5.998660132296847
+Average recursion depth: 1.0227393045600646
+(move #16)
+
+  A B C D E F G H 
+ +- - - - - - - - 
+0|. . . . . . . . 
+1|. . . O . . * . 
+2|. . X X O * . . 
+3|. . * X X O . . 
+4|. . . X X O X . 
+5|. . . . . X . O 
+6|. . . O . O . . 
+7|. . . * . O . . 
+
+Evaluation time: 0.0019999s
+Player X under AI control plays: B1
+Total heuristic evaluations: 270
+Evaluations by depth: {2: 268, 1: 2}
+Average evaluation depth:1.9925925925925927
+Average recursion depth: 1.0227272727272727
+(move #17)
+
+  A B C D E F G H 
+ +- - - - - - - - 
+0|. . . . . . . . 
+1|. X . O . . * . 
+2|. . X X O * . . 
+3|. . * X X O . . 
+4|. . . X X O X . 
+5|. . . . . X . O 
+6|. . . O . O . . 
+7|. . . * . O . . 
+
+
+The winner is X!
+6(b)i Average evaluation time: 2.1195455411764703
+6(b)ii Total heuristic evaluations: 5706788
+6(b)iii Evaluations by depth: {2: 8275, 6: 5697619, 5: 112, 4: 247, 3: 134, 1: 401}
+6(b)iv Average evaluation depth: 5.993671921928763
+6(b)v Average recursion depth: 1.0388235294117645
+6(b)vi Total moves: 17
