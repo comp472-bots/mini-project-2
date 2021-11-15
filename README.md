@@ -14,5 +14,5 @@ The code can be run as a single game, or programatically to generate output file
 
 1. To play a single game, enter the following command `pypy3 line-em-up.py`
 
-2. To play the game programatically, enter the following command: ``pypy3 line-em-up.py --output`. This will
+2. To play the game programatically, enter the following command: `pypy3 line-em-up.py --output`. This will
    also generate the output files.
