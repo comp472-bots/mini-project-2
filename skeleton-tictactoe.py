@@ -205,6 +205,27 @@ class Game:
 				print(F'{self.current_state[x][y]}', end=" ")
 			print()
 		print()
+	
+	def write_board_to_file(self,file_gametrace):
+		
+		if self.total_moves != 0: file_gametrace.write(F'\n(move #{self.total_moves})\n')
+
+		file_gametrace.write("   ", end=" ")
+		for x in range(1, self.board_size+1):
+			file_gametrace.write(chr(x + 64),"", end="")
+
+		file_gametrace.write("\n  + ",end="")
+		for x in range(0, self.board_size):
+			file_gametrace.write("-","", end="")
+
+		file_gametrace.write()
+		for x in range(0, self.board_size):
+			file_gametrace.write(x, "|", end=" ")
+			for y in range(0, self.board_size):
+				file_gametrace.write(F'{self.current_state[x][y]}', end=" ")
+			file_gametrace.write()
+		file_gametrace.write()
+
 
 	def is_end(self):
 		if self.last_move == (None, None):
@@ -752,8 +773,12 @@ class Game:
 			time_list.append(round(end - start, 7))
 			ard_list.append(round(ard, 2))
 
-	def replay(self, board_size, bloc_amount, lineup_size, max_allowed_time, max_depth_p1, max_depth_p2, search_type, bloc_positions):
+	def replay(self, board_size, bloc_amount, lineup_size, max_allowed_time, max_depth_p1, max_depth_p2, search_type, bloc_positions, file_gametrace):
 		
+		#Open gametrace file and clear contents
+		file_gametrace = open(F'../output/{file_gametrace}',"a")
+		file_gametrace.truncate(0)
+
 		self.board_size = board_size
 		self.bloc_amount = bloc_amount
 		self.lineup_size = lineup_size
@@ -773,9 +798,15 @@ class Game:
 		for bloc in bloc_positions:
 			self.current_state[bloc[0]][bloc[1]] = '*'
 		
+		depth_list = []
+		time_list = []
+		ard_list = []
+		
 		while True:
 			self.draw_board()
+			self.write_board_to_file(file_gametrace)
 			if self.check_end():
+				self.calculate_game_averages(time_list, depth_list, ard_list, self.total_moves)
 				return
 			start = time.time()
 			cutoff_time = start + self.max_allowed_time
@@ -813,15 +844,19 @@ class Game:
 			print("Evaluations by depth: ", depth_dict)
 			print("Average evaluation depth:", self.calclulate_avg_per_move_depth(depth_dict))
 			print("Average recursion depth: ", ard)
-
+			
+			depth_list.append(depth_dict)
+			time_list.append(round(end - start, 7))
+			ard_list.append(round(ard, 2))
 
 def main():
 	
 	g = Game(recommend=False)
 	g.play()
 	
-	for 
-	g.replay(4,4,3,5,6,6,False,[(0,0),(0,3),(3,0),(3,3)])
+	for i in range(10):
+		g.replay(4,4,3,5,6,6,False,[(0,0),(0,3),(3,0),(3,3)],"gameTrace-4435.txt")
+
 	# g.play(player_x=Game.AI,player_o=Game.HUMAN)
 
 if __name__ == "__main__":
