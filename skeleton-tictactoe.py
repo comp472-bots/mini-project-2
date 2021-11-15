@@ -182,7 +182,7 @@ class Game:
 		self.last_move = (None, None)
 		self.total_moves = 0
 		self.heuristic_score = 0
-		print(self.current_state)
+		#print(self.current_state)
 		# Player X always plays first
 		self.player_turn = 'X'
 
@@ -249,7 +249,7 @@ class Game:
 				print('The winner is O!')
 			elif self.result == '.':
 				print("It's a tie!")
-			self.initialize_game()
+			#self.initialize_game()
 		return self.result
 
 	def input_move(self):
@@ -418,13 +418,14 @@ class Game:
 				max_value = 1/(max(row_diff,col_diff)+1)
 				self.chance_matrix[row][col] = int(max_value*100)
 				
+		'''
 		print()
 		for row in range(rows):
 			for col in range(cols):
 				print(F'{self.chance_matrix[row][col]}', end=" ")
 			print()
 		print()
-		
+		'''
 	
 	#def e2(self):
 
@@ -701,10 +702,75 @@ class Game:
 			print("Average evaluation depth:", self.calclulate_avg_per_move_depth(depth_dict))
 			print("Average recursion depth: ", ard)
 
+	def replay(self, board_size, bloc_amount, lineup_size, max_allowed_time, max_depth_p1, max_depth_p2, search_type, bloc_positions):
+		
+		self.board_size = board_size
+		self.bloc_amount = bloc_amount
+		self.lineup_size = lineup_size
+		self.max_allowed_time = max_allowed_time
+		self.max_depth_p1 = max_depth_p1
+		self.max_depth_p2 = max_depth_p2
+		self.search_type = search_type
+		
+		self.current_state = [["." for i in range(self.board_size)] for i in range(self.board_size)]
+		self.generate_chance_matrix()
+		self.last_move = (None, None)
+		self.total_moves = 0
+		self.heuristic_score = 0
+		#print(self.current_state)
+		# Player X always plays first
+		self.player_turn = 'X'
+
+		for bloc in bloc_positions:
+			self.current_state[bloc[0]][bloc[1]] = '*'
+		
+		while True:
+			self.draw_board()
+			if self.check_end():
+				return
+			start = time.time()
+			cutoff_time = start + self.max_allowed_time
+			depth_dict = dict()
+			if self.search_type == self.MINIMAX:
+				if self.player_turn == 'X':
+					(_, x, y, depth_dict, ard) = self.minimax(max=False, max_time=cutoff_time, algo=1, max_depth=self.max_depth_p1, depth_dict=depth_dict)
+				else:
+					(_, x, y, depth_dict, ard) = self.minimax(max=True, max_time=cutoff_time, algo=2, max_depth=self.max_depth_p2, depth_dict=depth_dict)
+			else: # search_type == self.ALPHABETA
+				if self.player_turn == 'X':
+					(m, x, y, depth_dict, ard) = self.alphabeta(max=False, max_time=cutoff_time, algo=1, max_depth=self.max_depth_p1, depth_dict=depth_dict)
+				else:
+					(m, x, y, depth_dict, ard) = self.alphabeta(max=True, max_time=cutoff_time, algo=2, max_depth=self.max_depth_p2, depth_dict=depth_dict)
+			end = time.time()
+			if (self.player_turn == 'X' and self.player_x == self.HUMAN) or (self.player_turn == 'O' and self.player_o == self.HUMAN):
+					if self.recommend:
+						print(F'Evaluation time: {round(end - start, 7)}s')
+						print(F'Recommended move: x = {x}, y = {y}')
+					(x,y) = self.input_move()
+			if (self.player_turn == 'X' and self.player_x == self.AI) or (self.player_turn == 'O' and self.player_o == self.AI):
+						print(F'Evaluation time: {round(end - start, 7)}s')
+						#print(F'Player {self.player_turn} under AI control plays: x = {x}, y = {y}')
+						print(F'Player {self.player_turn} under AI control plays: {chr(y + 65)}{x}')
+			if self.player_turn == 'X':
+				self.heuristic_score -= self.chance_matrix[x][y]
+			else:
+				self.heuristic_score += self.chance_matrix[x][y]
+			self.current_state[x][y] = self.player_turn
+			self.last_move = (x, y)
+			self.total_moves += 1
+			self.switch_player()
+
+			print("Total heuristic evaluations: ", sum(depth_dict.values()))
+			print("Evaluations by depth: ", depth_dict)
+			print("Average evaluation depth:", self.calclulate_avg_per_move_depth(depth_dict))
+			print("Average recursion depth: ", ard)
+
+
 def main():
 	
 	g = Game(recommend=False)
 	g.play()
+	g.replay(4,4,3,5,6,6,False,[(0,0),(0,3),(3,0),(3,3)])
 	# g.play(player_x=Game.AI,player_o=Game.HUMAN)
 
 if __name__ == "__main__":
