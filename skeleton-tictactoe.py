@@ -447,7 +447,7 @@ class Game:
 		else:
 			depth_dict[depth] = 1
 
-	def minimax(self, max=False, max_depth=6, depth=0, max_time=0, algo=1, depth_dict=dict(), ard=0):
+	def minimax(self, max=False, max_depth=6, depth=0, max_time=0, algo=1, depth_dict=dict()):
 		# Minimizing for 'X' and maximizing for 'O'
 		# Possible values are:
 		# -1 - win for 'X'
@@ -499,7 +499,7 @@ class Game:
 					if max:
 						self.current_state[i][j] = 'O'
 						self.heuristic_score += self.chance_matrix[i][j]
-						(v, _, _, _, ard) = self.minimax(max=False, max_depth=max_depth, depth=(depth+1), max_time=max_time, algo=algo, depth_dict=depth_dict, ard=ard)
+						(v, _, _, _, ard) = self.minimax(max=False, max_depth=max_depth, depth=(depth+1), max_time=max_time, algo=algo, depth_dict=depth_dict)
 						if v > value:
 							value = v
 							x = i
@@ -507,7 +507,7 @@ class Game:
 					else:
 						self.current_state[i][j] = 'X'
 						self.heuristic_score -= self.chance_matrix[i][j]
-						(v, _, _, _, ard) = self.minimax(max=True, max_depth=max_depth, depth=(depth+1), max_time=max_time, algo=algo, depth_dict=depth_dict, ard=ard)
+						(v, _, _, _, ard) = self.minimax(max=True, max_depth=max_depth, depth=(depth+1), max_time=max_time, algo=algo, depth_dict=depth_dict)
 						if v < value:
 							value = v
 							x = i
@@ -526,7 +526,7 @@ class Game:
 		ard = sum_children_ard / num_children 
 		return (value, x, y, depth_dict, ard)
 
-	def alphabeta(self, alpha=-sys.maxsize, beta=sys.maxsize, max=False, max_depth=6, depth=0, max_time=0, algo=1, depth_dict=dict(), ard=0):
+	def alphabeta(self, alpha=-sys.maxsize, beta=sys.maxsize, max=False, max_depth=6, depth=0, max_time=0, algo=1, depth_dict=dict()):
 		# Minimizing for 'X' and maximizing for 'O'
 		# Possible values are:
 		# -1 - win for 'X'
@@ -577,7 +577,7 @@ class Game:
 					if max:
 						self.current_state[i][j] = 'O'
 						self.heuristic_score += self.chance_matrix[i][j]
-						(v, _, _, _, ard) = self.alphabeta(alpha, beta, max=False, max_depth=max_depth, depth=(depth+1), max_time=max_time, algo=algo, depth_dict=depth_dict, ard=ard)
+						(v, _, _, _, ard) = self.alphabeta(alpha, beta, max=False, max_depth=max_depth, depth=(depth+1), max_time=max_time, algo=algo, depth_dict=depth_dict)
 						if v > value:
 							value = v
 							x = i
@@ -585,7 +585,7 @@ class Game:
 					else:
 						self.current_state[i][j] = 'X'
 						self.heuristic_score -= self.chance_matrix[i][j]
-						(v, _, _, _, ard) = self.alphabeta(alpha, beta, max=True, max_depth=max_depth, depth=(depth+1), max_time=max_time, algo=algo, depth_dict=depth_dict, ard=ard)
+						(v, _, _, _, ard) = self.alphabeta(alpha, beta, max=True, max_depth=max_depth, depth=(depth+1), max_time=max_time, algo=algo, depth_dict=depth_dict)
 						if v < value:
 							value = v
 							x = i
