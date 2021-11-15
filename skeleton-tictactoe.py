@@ -54,7 +54,6 @@ class Game:
 	
 	def get_bloc_positions(self):
 		for i in range(self.bloc_amount):
-			
 			while True:
 				try:
 					px = int(input(F'enter the row number of bloc {i} (0-{self.board_size-1}) : '))
@@ -161,9 +160,7 @@ class Game:
 				else:
 					print ("Incorrect value... Try again!")
 	
-
 	def get_parameters(self):
-		
 		self.get_bloc_amount()
 		self.get_bloc_positions()
 		self.get_lineup_size()
@@ -181,12 +178,9 @@ class Game:
 		self.last_move = (None, None)
 		self.total_moves = 0
 		self.heuristic_score = 0
-		#print(self.current_state)
-		# Player X always plays first
 		self.player_turn = 'X'
 
-	def draw_board(self):
-		
+	def draw_board(self):	
 		if self.total_moves != 0: print(F'(move #{self.total_moves})\n')
 
 		print("   ", end=" ")
@@ -206,7 +200,6 @@ class Game:
 		print()
 	
 	def write_board_to_file(self,file_gametrace):
-		
 		if self.total_moves != 0: file_gametrace.write(F'(move #{self.total_moves})\n\n')
 
 		file_gametrace.write("  ")
@@ -306,90 +299,6 @@ class Game:
 		return self.player_turn
 
 	def e1(self, max):
-		if self.last_move == (None, None):
-			return None
-
-		row, col = self.last_move
-		item = self.current_state[row][col]
-		rows = self.board_size
-		cols = self.board_size
-
-		score = 0
-		for delta_row, delta_col in [(1, 0), (0, 1), (1, 1), (1, -1)]:
-			consecutive_items = 1
-			open_positions = 0
-			stop = False
-			for delta in (1, -1):
-				delta_row *= delta
-				delta_col *= delta
-				next_row = row + delta_row
-				next_col = col + delta_col
-
-				while (0 <= next_row < rows) and (0 <= next_col < cols) and (not stop):
-					if self.current_state[next_row][next_col] == item:
-						consecutive_items += 1
-					elif self.current_state[next_row][next_col] == '.':
-						open_positions += 1
-					else:
-						break
-					if (consecutive_items + open_positions) == self.lineup_size:
-						# score += 1
-						score += consecutive_items**6
-						stop = True
-						break
-					next_row += delta_row
-					next_col += delta_col
-
-				if stop:
-					break
-
-		return score if max else -score
-
-	def e2(self, max):
-
-		rows = self.board_size
-		cols = self.board_size
-
-		score = 0
-
-		for row in range(rows):
-			for col in range(cols):
-				item = self.current_state[row][col]
-				if item == 'X' or item == 'O':
-					for delta_row, delta_col in [(1, 0), (0, 1), (1, 1), (1, -1)]:
-						consecutive_items = 1
-						open_positions = 0
-						stop = False
-						for delta in (1, -1):
-							delta_row *= delta
-							delta_col *= delta
-							next_row = row + delta_row
-							next_col = col + delta_col
-
-							while (0 <= next_row < rows) and (0 <= next_col < cols) and (not stop):
-								if self.current_state[next_row][next_col] == item:
-									consecutive_items += 1
-								elif self.current_state[next_row][next_col] == '.':
-									open_positions += 1
-								else:
-									break
-								if (consecutive_items + open_positions) == self.lineup_size:
-									if (item == 'X'):
-										score -= 1
-									elif (item == 'O'):
-										score += 1
-									
-									stop = True
-									break
-								next_row += delta_row
-								next_col += delta_col
-
-							if stop:
-								break
-
-		return score
-
-	def e3(self, max):
 
 		rows = self.board_size
 		cols = self.board_size
@@ -449,30 +358,6 @@ class Game:
 				max_value = 1/(max(row_diff,col_diff)+1)
 				self.chance_matrix[row][col] = int(max_value*100)
 				
-		'''
-		print()
-		for row in range(rows):
-			for col in range(cols):
-				print(F'{self.chance_matrix[row][col]}', end=" ")
-			print()
-		print()
-		'''
-	
-	#def e2(self):
-
-		#for i in range(0, self.board_size):
-		
-		#score = 0
-
-
-
-
-		#for i in range(0,4):
-		#	score += 1
-
-		#print(score)
-
-
 	def increment_depth_dict(self, depth_dict, depth):
 		if depth in depth_dict:
 			depth_dict[depth] += 1
@@ -481,11 +366,7 @@ class Game:
 
 	def minimax(self, max=False, max_depth=6, depth=0, max_time=0, algo=1, depth_dict=dict()):
 		# Minimizing for 'X' and maximizing for 'O'
-		# Possible values are:
-		# -1 - win for 'X'
-		# 0  - a tie
-		# 1  - loss for 'X'
-		# We're initially setting it to 2 or -2 as worse than the worst case:
+		# We're initially setting it to INFINITY or -INFINITY as worse than the worst case:
 		value = self.INFINITY
 		if max:
 			value = -self.INFINITY
@@ -505,13 +386,13 @@ class Game:
 		# If we're approaching the maximum allowed time, make a decision!
 		elif ((time.time() + 0.1 * self.max_allowed_time) > max_time):
 			self.increment_depth_dict(depth_dict, depth)
-			heuristic = self.heuristic_score if algo == 1 else self.e3(max=max)
+			heuristic = self.heuristic_score if algo == 1 else self.e1(max=max)
 			return (heuristic, x, y, depth_dict, depth)
 		
 		# If we reach (depth == max_depth) --> calcualte heuristic + and return
 		elif depth == max_depth:
 			self.increment_depth_dict(depth_dict, depth)
-			heuristic = self.heuristic_score if algo == 1 else self.e3(max=max)
+			heuristic = self.heuristic_score if algo == 1 else self.e1(max=max)
 			return (heuristic, x, y, depth_dict, depth)
 
 		# Otherwise, generate game tree
@@ -560,11 +441,7 @@ class Game:
 
 	def alphabeta(self, alpha=-sys.maxsize, beta=sys.maxsize, max=False, max_depth=6, depth=0, max_time=0, algo=1, depth_dict=dict()):
 		# Minimizing for 'X' and maximizing for 'O'
-		# Possible values are:
-		# -1 - win for 'X'
-		# 0  - a tie
-		# 1  - loss for 'X'
-		# We're initially setting it to 2 or -2 as worse than the worst case:
+		# We're initially setting it to INFINITY or -INFINITY as worse than the worst case:
 		value = self.INFINITY
 		if max:
 			value = -self.INFINITY
@@ -584,13 +461,13 @@ class Game:
 		# If we're approaching the maximum allowed time, make a decision!
 		elif ((time.time() + 0.1 * self.max_allowed_time) > max_time):
 			self.increment_depth_dict(depth_dict, depth)
-			heuristic = self.heuristic_score if algo == 1 else self.e3(max=max)
+			heuristic = self.heuristic_score if algo == 1 else self.e1(max=max)
 			return (heuristic, x, y, depth_dict, depth)
 		
 		# If we reach (depth == max_depth) --> calcualte heuristic + and return
 		elif depth == max_depth:
 			self.increment_depth_dict(depth_dict, depth)
-			heuristic = self.heuristic_score if algo == 1 else self.e3(max=max)
+			heuristic = self.heuristic_score if algo == 1 else self.e1(max=max)
 			return (heuristic, x, y, depth_dict, depth)
 
 		# Otherwise, generate game tree
