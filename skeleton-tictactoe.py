@@ -724,14 +724,15 @@ class Game:
 
 		# Total Moves --> num_moves
 
+		return (average_eval_time, total_heuristic_evaluations, total_depths, average_eval_depth, average_ard, num_moves)
+	
+	def print_average_metrics(self, average_eval_time, total_heuristic_evaluations, total_depths, average_eval_depth, average_ard, num_moves):
 		print("6(b)i Average evaluation time: ", average_eval_time)
 		print("6(b)ii Total heuristic evaluations: ", total_heuristic_evaluations)
 		print("6(b)iii Evaluations by depth: ", total_depths)
 		print("6(b)iv Average evaluation depth: ", average_eval_depth)
 		print("6(b)v Average recursion depth: ", average_ard)
 		print("6(b)vi Total moves: ", num_moves)
-		return (average_eval_time, total_heuristic_evaluations, total_depths, average_eval_depth, average_ard, num_moves)
-		
 
 
 	def play(self):
@@ -832,6 +833,7 @@ class Game:
 				self.write_winner(file_gametrace)
 				self.write_average_metrics(file_gametrace, time_list, depth_list, ard_list, self.total_moves)
 				(average_eval_time, total_heuristic_evaluations, total_depths, average_eval_depth, average_ard, num_moves) = self.calculate_game_averages(time_list, depth_list, ard_list, self.total_moves)
+				self.print_average_metrics(average_eval_time, total_heuristic_evaluations, total_depths, average_eval_depth, average_ard, num_moves)
 				file_gametrace.close()
 				return (average_eval_time, total_heuristic_evaluations, total_depths, average_eval_depth, average_ard, num_moves, result)
 			start = time.time()
