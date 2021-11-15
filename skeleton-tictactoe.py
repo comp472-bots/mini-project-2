@@ -56,15 +56,17 @@ class Game:
 		for i in range(self.bloc_amount):
 			
 			while True:
+				try:
+					px = int(input(F'enter the row number of bloc {i} (0-{self.board_size-1}) : '))
+					py = ord(input(F'enter the column letter of bloc {i} (A-{chr(self.board_size + 64)}) : ')) - 65
 
-				px = int(input(F'enter the row number of bloc {i} (0-{self.board_size-1}) : '))
-				py = ord(input(F'enter the column letter of bloc {i} (A-{chr(self.board_size + 64)}) : ')) - 65
-
-				if self.is_valid(px, py):
-					self.current_state[px][py] = '*'
-					break
-				else:
-					print('The position is not valid! Try again.')
+					if self.is_valid(px, py):
+						self.current_state[px][py] = '*'
+						break
+					else:
+						print('The position is not valid! Try again.')
+				except ValueError:
+					print("Please enter a valid input")
 			
 					
 	def get_lineup_size(self):
