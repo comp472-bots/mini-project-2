@@ -249,7 +249,6 @@ class Game:
 				print('The winner is O!')
 			elif self.result == '.':
 				print("It's a tie!")
-			self.initialize_game()
 		return self.result
 
 	def input_move(self):
@@ -657,12 +656,59 @@ class Game:
 			numerator += depth * depth_dict[depth]
 		return numerator/denominator
 
+	def merge_depth_dicts(self, depths):
+		new_depths = dict()
+		for depth_dict in depths:
+			for depth in depth_dict:
+				if depth in new_depths:
+					new_depths[depth] += depth_dict[depth]
+				else:
+					new_depths[depth] = depth_dict[depth]
+		return new_depths
+
+	def calculate_game_averages(self, time_list, depths, ard_list, num_moves):
+		"""
+		time_list: list of evaluation times
+		depths: list of dictionaries. e.g. [{1: 23, 2: 80, 6: 900}, {1: 43, 2: 80, 3: 120}]
+		ard_list: list of average recursion depth (ARD). e.g. [1.02, 5.22, ...]
+		num_moves: total number of moves
+		"""
+		#(i) Average evaluation time
+		average_eval_time = sum(time_list)/len(time_list)
+
+		#(ii) Total heuristic evaluations
+		total_depths = self.merge_depth_dicts(depths)
+		total_heuristic_evaluations = sum(total_depths.values())
+
+		#(iii) Evaluations by depth --> total_depths
+
+		# (iv) Average evaluation depth
+		average_eval_depth = self.calclulate_avg_per_move_depth(total_depths)
+
+		# (v) Average recursion depth
+		average_ard = sum(ard_list) / len(ard_list)
+
+		# Total Moves --> num_moves
+
+		print("Average evaluation time: ", average_eval_time)
+		print("Total heuristic evaluations: ", total_heuristic_evaluations)
+		print("Evaluations by depth: ", total_depths)
+		print("Average evaluation depth: ", average_eval_depth)
+		print("Average recursion depth: ", average_ard)
+		return (average_eval_time, total_heuristic_evaluations, total_depths, average_eval_depth, average_ard, num_moves)
+		
+
 
 	def play(self):
 		
+		depth_list = []
+		time_list = []
+		ard_list = []
+
 		while True:
 			self.draw_board()
 			if self.check_end():
+				self.calculate_game_averages(time_list, depth_list, ard_list, self.total_moves)
 				return
 			start = time.time()
 			cutoff_time = start + self.max_allowed_time
@@ -700,6 +746,10 @@ class Game:
 			print("Evaluations by depth: ", depth_dict)
 			print("Average evaluation depth:", self.calclulate_avg_per_move_depth(depth_dict))
 			print("Average recursion depth: ", ard)
+
+			depth_list.append(depth_dict)
+			time_list.append(round(end - start, 7))
+			ard_list.append(round(ard, 2))
 
 def main():
 	
