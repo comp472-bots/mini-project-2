@@ -807,6 +807,7 @@ class Game:
 			self.write_board_to_file(file_gametrace)
 			if self.check_end():
 				self.calculate_game_averages(time_list, depth_list, ard_list, self.total_moves)
+				file_gametrace.close()
 				return
 			start = time.time()
 			cutoff_time = start + self.max_allowed_time
@@ -855,6 +856,8 @@ class Game:
 			depth_list.append(depth_dict)
 			time_list.append(round(end - start, 7))
 			ard_list.append(round(ard, 2))
+
+		
 
 def main():
 	
