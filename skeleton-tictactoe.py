@@ -289,15 +289,17 @@ class Game:
 			print(F'Player {self.player_turn}, enter your move:')
 			# px = int(input('enter the x coordinate: '))
 			# py = int(input('enter the y coordinate: '))
+			try:
+				px = int(input(F'enter the row number (0-{self.board_size-1}) : '))
+				py = ord(input(F'enter the column letter (A-{chr(self.board_size + 64)}) : ')) - 65
+				print(py)
 
-			px = int(input(F'enter the row number (0-{self.board_size-1}) : '))
-			py = ord(input(F'enter the column letter (A-{chr(self.board_size + 64)}) : ')) - 65
-			print(py)
-
-			if self.is_valid(px, py):
-				return (px,py)
-			else:
-				print('The move is not valid! Try again.')
+				if self.is_valid(px, py):
+					return (px,py)
+				else:
+					print('The move is not valid! Try again.')
+			except ValueError:
+				print ("Please enter a valid input")
 
 	def switch_player(self):
 		if self.player_turn == 'X':
