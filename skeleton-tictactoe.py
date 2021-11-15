@@ -634,6 +634,14 @@ class Game:
 			self.switch_player()
 	'''	
 
+	def calclulate_avg_per_move_depth(self, depth_dict):
+		numerator = 0
+		denominator = sum(depth_dict.values())
+		for depth in depth_dict:
+			numerator += depth * depth_dict[depth]
+		return numerator/denominator
+
+
 	def play(self):
 		
 		while True:
@@ -674,6 +682,7 @@ class Game:
 
 			print("Total heuristic evaluations: ", sum(depth_dict.values()))
 			print("Evaluations by depth: ", depth_dict)
+			print("Average evaluation depth:", self.calclulate_avg_per_move_depth(depth_dict))
 
 def main():
 	
