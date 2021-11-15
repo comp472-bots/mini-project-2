@@ -825,12 +825,15 @@ class Game:
 			if (self.player_turn == 'X' and self.player_x == self.HUMAN) or (self.player_turn == 'O' and self.player_o == self.HUMAN):
 					if self.recommend:
 						print(F'Evaluation time: {round(end - start, 7)}s')
+						file_gametrace.write(F'Evaluation time: {round(end - start, 7)}s')
 						print(F'Recommended move: x = {x}, y = {y}')
 					(x,y) = self.input_move()
 			if (self.player_turn == 'X' and self.player_x == self.AI) or (self.player_turn == 'O' and self.player_o == self.AI):
 						print(F'Evaluation time: {round(end - start, 7)}s')
+						file_gametrace.write(F'Evaluation time: {round(end - start, 7)}s')
 						#print(F'Player {self.player_turn} under AI control plays: x = {x}, y = {y}')
 						print(F'Player {self.player_turn} under AI control plays: {chr(y + 65)}{x}')
+						file_gametrace.write(F'Player {self.player_turn} under AI control plays: {chr(y + 65)}{x}')
 			if self.player_turn == 'X':
 				self.heuristic_score -= self.chance_matrix[x][y]
 			else:
@@ -841,9 +844,13 @@ class Game:
 			self.switch_player()
 
 			print("Total heuristic evaluations: ", sum(depth_dict.values()))
+			file_gametrace.write("Total heuristic evaluations: ", sum(depth_dict.values()))
 			print("Evaluations by depth: ", depth_dict)
+			file_gametrace.write("Evaluations by depth: ", depth_dict)
 			print("Average evaluation depth:", self.calclulate_avg_per_move_depth(depth_dict))
+			file_gametrace.write("Average evaluation depth:", self.calclulate_avg_per_move_depth(depth_dict))
 			print("Average recursion depth: ", ard)
+			file_gametrace.write("Average recursion depth: ", ard)
 			
 			depth_list.append(depth_dict)
 			time_list.append(round(end - start, 7))
