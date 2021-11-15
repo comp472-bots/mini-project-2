@@ -884,22 +884,22 @@ class Game:
 			time_list.append(round(end - start, 7))
 			ard_list.append(round(ard, 2))
 
-def write_to_scoreboard(file, wins, average_eval_time, total_heuristic_evaluations, total_depths, average_eval_depth, average_ard, moves):
-	win_percentage_X = round((wins.count('X') / len(wins)) * 100, 2)
-	win_percentage_O = round((wins.count('O') / len(wins)) * 100, 2)
-	tie_percentage = round((wins.count('.') / len(wins)) * 100, 2)
-	
-	file.write("\n\n")
-	file.write(str(len(moves)) + " games" + "\n")
-	file.write("Total wins for 'X': " + str(wins.count('X')) + " ("+ str(win_percentage_X) + "%)" + "\n")
-	file.write("Total wins for 'O': " + str(wins.count('O')) + " ("+ str(win_percentage_O) + "%)" + "\n")
-	file.write("Total ties: " + str(wins.count('.')) + " ("+ str(tie_percentage) + "%)" + "\n")
-	file.write("i Average evaluation time: " +  str(average_eval_time) + "\n")
-	file.write("ii Total heuristic evaluations: " + str(total_heuristic_evaluations) + "\n")
-	file.write("iii Evaluations by depth: " + str (total_depths) + "\n")
-	file.write("iv Average evaluation depth: " + str(average_eval_depth) + "\n")
-	file.write("v Average recursion depth: " + str(average_ard) + "\n")
-	file.write("vi Average moves per game: " + str(sum(moves)/len(moves)) + "\n")
+	def write_to_scoreboard(self, file, wins, average_eval_time, total_heuristic_evaluations, total_depths, average_eval_depth, average_ard, moves):
+		win_percentage_X = round((wins.count('X') / len(wins)) * 100, 2)
+		win_percentage_O = round((wins.count('O') / len(wins)) * 100, 2)
+		tie_percentage = round((wins.count('.') / len(wins)) * 100, 2)
+		
+		file.write("\n\n")
+		file.write(str(len(moves)) + " games" + "\n")
+		file.write("Total wins for 'X': " + str(wins.count('X')) + " ("+ str(win_percentage_X) + "%)" + "\n")
+		file.write("Total wins for 'O': " + str(wins.count('O')) + " ("+ str(win_percentage_O) + "%)" + "\n")
+		file.write("Total ties: " + str(wins.count('.')) + " ("+ str(tie_percentage) + "%)" + "\n")
+		file.write("i Average evaluation time: " +  str(average_eval_time) + "\n")
+		file.write("ii Total heuristic evaluations: " + str(total_heuristic_evaluations) + "\n")
+		file.write("iii Evaluations by depth: " + str (total_depths) + "\n")
+		file.write("iv Average evaluation depth: " + str(average_eval_depth) + "\n")
+		file.write("v Average recursion depth: " + str(average_ard) + "\n")
+		file.write("vi Average moves per game: " + str(sum(moves)/len(moves)) + "\n")
 
 def main():
 	
@@ -923,19 +923,9 @@ def main():
 		total_moves.append(num_moves)
 	(average_eval_time, total_heuristic_evaluations, total_depths, average_eval_depth, average_ard, num_moves) = g.calculate_game_averages(time_list, depth_list, ard_list, total_moves)
 
-
-	# Use this line to write to the file:
-	# self.write_to_scoreboard(file, wins, average_eval_time, total_heuristic_evaluations, total_depths, average_eval_depth, average_ard, total_moves)
-	
-	# print("X win percentage: ", win_percentage_X)
-	# print("O win percentage: ", win_percentage_O)
-	# print("Tie percentage: ", tie_percentage)
-	# print("6(b)i Average evaluation time: ", average_eval_time)
-	# print("6(b)ii Total heuristic evaluations: ", total_heuristic_evaluations)
-	# print("6(b)iii Evaluations by depth: ", total_depths)
-	# print("6(b)iv Average evaluation depth: ", average_eval_depth)
-	# print("6(b)v Average recursion depth: ", average_ard)
-	# print("6(b)vi Total moves: ", num_moves)
+	file_scoreboard = open(F'./output/scoreboard-4435',"a")
+	file_scoreboard.truncate(0)
+	g.write_to_scoreboard(file_scoreboard, wins, average_eval_time, total_heuristic_evaluations, total_depths, average_eval_depth, average_ard, total_moves)
 
 	# g.play(player_x=Game.AI,player_o=Game.HUMAN)
 
