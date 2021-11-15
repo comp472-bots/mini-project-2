@@ -272,6 +272,18 @@ class Game:
 				print("It's a tie!")
 		return self.result
 
+	def write_winner(self, file):
+		self.result = self.is_end()
+		# Writing the appropriate message if the game has ended
+		if self.result != None:
+			if self.result == 'X':
+				file.write('\nThe winner is X!')
+			elif self.result == 'O':
+				file.write('\nThe winner is O!')
+			elif self.result == '.':
+				file.write("\nIt's a tie!")
+		return self.result
+
 	def input_move(self):
 		while True:
 			print(F'Player {self.player_turn}, enter your move:')
@@ -806,6 +818,7 @@ class Game:
 			self.draw_board()
 			self.write_board_to_file(file_gametrace)
 			if self.check_end():
+				self.write_winner(file_gametrace)
 				self.calculate_game_averages(time_list, depth_list, ard_list, self.total_moves)
 				return
 			start = time.time()
