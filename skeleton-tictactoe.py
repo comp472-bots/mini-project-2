@@ -15,9 +15,6 @@ class Game:
 	MIN = -10**12
 	
 	def __init__(self, recommend = True):
-		
-		self.initialize_game()
-		self.get_parameters()
 		self.recommend = recommend
 	
 	def get_board_size(self):
@@ -287,12 +284,10 @@ class Game:
 	def input_move(self):
 		while True:
 			print(F'Player {self.player_turn}, enter your move:')
-			# px = int(input('enter the x coordinate: '))
-			# py = int(input('enter the y coordinate: '))
+
 			try:
 				px = int(input(F'enter the row number (0-{self.board_size-1}) : '))
 				py = ord(input(F'enter the column letter (A-{chr(self.board_size + 64)}) : ')) - 65
-				print(py)
 
 				if self.is_valid(px, py):
 					return (px,py)
@@ -930,53 +925,50 @@ class Game:
 def main():
 	
 	g = Game(recommend=False)
-	g.play()
-	 
-	'''
-	depth_list = []
-	time_list = []
-	ard_list = []
-	wins = []
-	total_moves = []
 
-	for i in range(10):
-		(average_eval_time, total_heuristic_evaluations, total_depths, average_eval_depth, average_ard, num_moves, result) = g.replay(4,4,3,5,6,6,False,[(0,0),(0,3),(3,0),(3,3)],"gameTrace-4435.txt")
-		depth_list.append(total_depths)
-		time_list.append(average_eval_time)
-		ard_list.append(average_ard)
-		wins.append(result)
-		total_moves.append(num_moves)
-	(average_eval_time, total_heuristic_evaluations, total_depths, average_eval_depth, average_ard, num_moves) = g.calculate_game_averages(time_list, depth_list, ard_list, total_moves)
+	output = False
+	try:
+		if len(sys.argv) == 2:
+			option = sys.argv[1]
+			if option == "--output":
+				output = True
+	except:
+		output = False
 
-	file_scoreboard = open(F'./output/scoreboard-4435',"a")
-	file_scoreboard.truncate(0)
-	g.write_to_scoreboard(file_scoreboard, wins, average_eval_time, total_heuristic_evaluations, total_depths, average_eval_depth, average_ard, total_moves)
-	'''
-	#Configuration #1 
-	g.write_test_configuration(4,4,3,5,6,6,False,[(0,0),(0,3),(3,0),(3,3)])
+	# Play the game normally
+	if not output:
+		g.initialize_game()
+		g.get_parameters()
+		g.play()
 
-	#Configuration #2	
-	g.write_test_configuration(4,4,3,1,6,6,True,[(0,0),(0,3),(3,0),(3,3)])
-	
-	#Configuration #3 
-	g.write_test_configuration(5,4,4,1,2,6,True,[(1,1),(2,4),(3,1),(1,0)])
-	
-	#Configuration #4 
-	g.write_test_configuration(5,4,4,5,6,6,True,[(4,3),(1,3),(3,0),(2,3)])
-	
-	#Configuration #5 
-	g.write_test_configuration(8,5,5,1,2,6,True,[(2,7),(3,4),(5,1),(0,6)])
-	
-	#Configuration #6 
-	g.write_test_configuration(8,5,5,5,2,6,True,[(3,2),(1,6),(7,3),(2,5)])
-	
-	#Configuration #7 
-	g.write_test_configuration(8,6,5,1,6,6,True,[(7,3),(6,2),(5,4),(2,3)])
-	
-	#Configuration 8 
-	g.write_test_configuration(8,6,5,5,6,6,True,[(1,4),(2,3),(5,3),(3,3)])
-	
-	# g.play(player_x=Game.AI,player_o=Game.HUMAN)
+	# Play the game programmatically and generate outputs
+	else:
+		g.player_x = g.AI
+		g.player_o = g.AI
+
+		#Configuration #1 
+		g.write_test_configuration(4,4,3,5,6,6,False,[(0,0),(0,3),(3,0),(3,3)])
+
+		#Configuration #2	
+		g.write_test_configuration(4,4,3,1,6,6,True,[(0,0),(0,3),(3,0),(3,3)])
+		
+		#Configuration #3 
+		g.write_test_configuration(5,4,4,1,2,6,True,[(1,1),(2,4),(3,1),(1,0)])
+		
+		#Configuration #4 
+		g.write_test_configuration(5,4,4,5,6,6,True,[(4,3),(1,3),(3,0),(2,3)])
+		
+		#Configuration #5 
+		g.write_test_configuration(8,5,5,1,2,6,True,[(2,7),(3,4),(5,1),(0,6)])
+		
+		#Configuration #6 
+		g.write_test_configuration(8,5,5,5,2,6,True,[(3,2),(1,6),(7,3),(2,5)])
+		
+		#Configuration #7 
+		g.write_test_configuration(8,6,5,1,6,6,True,[(7,3),(6,2),(5,4),(2,3)])
+		
+		#Configuration 8 
+		g.write_test_configuration(8,6,5,5,6,6,True,[(1,4),(2,3),(5,3),(3,3)])
 
 if __name__ == "__main__":
 	main()
