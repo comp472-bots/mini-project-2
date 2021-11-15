@@ -188,7 +188,7 @@ class Game:
 
 	def draw_board(self):
 		
-		if self.total_moves != 0: print(F'\n(move #{self.total_moves})\n')
+		if self.total_moves != 0: print(F'(move #{self.total_moves})\n')
 
 		print("   ", end=" ")
 		for x in range(1, self.board_size+1):
@@ -208,23 +208,23 @@ class Game:
 	
 	def write_board_to_file(self,file_gametrace):
 		
-		if self.total_moves != 0: file_gametrace.write(F'\n(move #{self.total_moves})\n')
+		if self.total_moves != 0: file_gametrace.write(F'(move #{self.total_moves})\n\n')
 
-		file_gametrace.write("   ", end=" ")
+		file_gametrace.write("  ")
 		for x in range(1, self.board_size+1):
-			file_gametrace.write(chr(x + 64),"", end="")
+			file_gametrace.write(chr(x + 64) + " ")
 
-		file_gametrace.write("\n  + ",end="")
+		file_gametrace.write("\n +")
 		for x in range(0, self.board_size):
-			file_gametrace.write("-","", end="")
+			file_gametrace.write("- ")
 
-		file_gametrace.write()
+		file_gametrace.write("\n")
 		for x in range(0, self.board_size):
-			file_gametrace.write(x, "|", end=" ")
+			file_gametrace.write(str(x) + "|")
 			for y in range(0, self.board_size):
-				file_gametrace.write(F'{self.current_state[x][y]}', end=" ")
-			file_gametrace.write()
-		file_gametrace.write()
+				file_gametrace.write(F'{self.current_state[x][y]}' + " ")
+			file_gametrace.write("\n")
+		file_gametrace.write("\n")
 
 
 	def is_end(self):
@@ -776,7 +776,7 @@ class Game:
 	def replay(self, board_size, bloc_amount, lineup_size, max_allowed_time, max_depth_p1, max_depth_p2, search_type, bloc_positions, file_gametrace):
 		
 		#Open gametrace file and clear contents
-		file_gametrace = open(F'../output/{file_gametrace}',"a")
+		file_gametrace = open(F'./output/{file_gametrace}',"a")
 		file_gametrace.truncate(0)
 
 		self.board_size = board_size
@@ -825,15 +825,15 @@ class Game:
 			if (self.player_turn == 'X' and self.player_x == self.HUMAN) or (self.player_turn == 'O' and self.player_o == self.HUMAN):
 					if self.recommend:
 						print(F'Evaluation time: {round(end - start, 7)}s')
-						file_gametrace.write(F'Evaluation time: {round(end - start, 7)}s')
+						file_gametrace.write(F'Evaluation time: {round(end - start, 7)}s' + "\n")
 						print(F'Recommended move: x = {x}, y = {y}')
 					(x,y) = self.input_move()
 			if (self.player_turn == 'X' and self.player_x == self.AI) or (self.player_turn == 'O' and self.player_o == self.AI):
 						print(F'Evaluation time: {round(end - start, 7)}s')
-						file_gametrace.write(F'Evaluation time: {round(end - start, 7)}s')
+						file_gametrace.write(F'Evaluation time: {round(end - start, 7)}s' + "\n")
 						#print(F'Player {self.player_turn} under AI control plays: x = {x}, y = {y}')
 						print(F'Player {self.player_turn} under AI control plays: {chr(y + 65)}{x}')
-						file_gametrace.write(F'Player {self.player_turn} under AI control plays: {chr(y + 65)}{x}')
+						file_gametrace.write(F'Player {self.player_turn} under AI control plays: {chr(y + 65)}{x}' + "\n")
 			if self.player_turn == 'X':
 				self.heuristic_score -= self.chance_matrix[x][y]
 			else:
@@ -844,13 +844,13 @@ class Game:
 			self.switch_player()
 
 			print("Total heuristic evaluations: ", sum(depth_dict.values()))
-			file_gametrace.write("Total heuristic evaluations: ", sum(depth_dict.values()))
+			file_gametrace.write("Total heuristic evaluations: " + str(sum(depth_dict.values())) + "\n")
 			print("Evaluations by depth: ", depth_dict)
-			file_gametrace.write("Evaluations by depth: ", depth_dict)
+			file_gametrace.write("Evaluations by depth: " + str(depth_dict) + "\n")
 			print("Average evaluation depth:", self.calclulate_avg_per_move_depth(depth_dict))
-			file_gametrace.write("Average evaluation depth:", self.calclulate_avg_per_move_depth(depth_dict))
+			file_gametrace.write("Average evaluation depth:" +  str(self.calclulate_avg_per_move_depth(depth_dict)) + "\n")
 			print("Average recursion depth: ", ard)
-			file_gametrace.write("Average recursion depth: ", ard)
+			file_gametrace.write("Average recursion depth: " + str(ard) + "\n")
 			
 			depth_list.append(depth_dict)
 			time_list.append(round(end - start, 7))
