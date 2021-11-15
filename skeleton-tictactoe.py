@@ -724,11 +724,12 @@ class Game:
 
 		# Total Moves --> num_moves
 
-		print("Average evaluation time: ", average_eval_time)
-		print("Total heuristic evaluations: ", total_heuristic_evaluations)
-		print("Evaluations by depth: ", total_depths)
-		print("Average evaluation depth: ", average_eval_depth)
-		print("Average recursion depth: ", average_ard)
+		print("6(b)i Average evaluation time: ", average_eval_time)
+		print("6(b)ii Total heuristic evaluations: ", total_heuristic_evaluations)
+		print("6(b)iii Evaluations by depth: ", total_depths)
+		print("6(b)iv Average evaluation depth: ", average_eval_depth)
+		print("6(b)v Average recursion depth: ", average_ard)
+		print("6(b)vi Total moves: ", num_moves)
 		return (average_eval_time, total_heuristic_evaluations, total_depths, average_eval_depth, average_ard, num_moves)
 		
 
@@ -785,6 +786,15 @@ class Game:
 			time_list.append(round(end - start, 7))
 			ard_list.append(round(ard, 2))
 
+	def write_average_metrics(self, gametrace, time_list, depths, ard_list, num_moves):
+		(average_eval_time, total_heuristic_evaluations, total_depths, average_eval_depth, average_ard, num_moves) = self.calculate_game_averages(time_list, depths, ard_list, num_moves)
+		gametrace.write("\n6(b)i Average evaluation time: " + str(average_eval_time) + "\n")
+		gametrace.write("6(b)ii Total heuristic evaluations: " + str(total_heuristic_evaluations) + "\n")
+		gametrace.write("6(b)iii Evaluations by depth: " + str(total_depths) + "\n")
+		gametrace.write("6(b)iv Average evaluation depth: " + str(average_eval_depth) + "\n")
+		gametrace.write("6(b)v Average recursion depth: " + str(average_ard) + "\n")
+		gametrace.write("6(b)vi Total moves: " + str(num_moves) + "\n")
+
 	def replay(self, board_size, bloc_amount, lineup_size, max_allowed_time, max_depth_p1, max_depth_p2, search_type, bloc_positions, file_gametrace):
 		
 		#Open gametrace file and clear contents
@@ -819,7 +829,7 @@ class Game:
 			self.write_board_to_file(file_gametrace)
 			if self.check_end():
 				self.write_winner(file_gametrace)
-				self.calculate_game_averages(time_list, depth_list, ard_list, self.total_moves)
+				self.write_average_metrics(file_gametrace, time_list, depth_list, ard_list, self.total_moves)
 				file_gametrace.close()
 				return
 			start = time.time()
