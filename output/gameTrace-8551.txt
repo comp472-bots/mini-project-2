@@ -1,3 +1,9 @@
+n=8 b=5 s=5 t=1
+
+Player 1: AI d=2
+Player 2: AI d=6
+a=True
+
   A B C D E F G H 
  +- - - - - - - - 
 0|* . . . . . * . 
@@ -9,7 +15,7 @@
 6|. . . . . . . . 
 7|. . . . . . . . 
 
-Evaluation time: 0.0009959s
+Evaluation time: 0.000998s
 Player X under AI control plays: D3
 Total heuristic evaluations: 1000
 Evaluations by depth: {2: 1000}
@@ -28,11 +34,11 @@ Average recursion depth: 1.0677966101694916
 6|. . . . . . . . 
 7|. . . . . . . . 
 
-Evaluation time: 0.904973s
+Evaluation time: 0.9036119s
 Player O under AI control plays: B4
-Total heuristic evaluations: 180037
-Evaluations by depth: {6: 179895, 5: 1, 4: 28, 3: 1, 2: 55, 1: 57}
-Average evaluation depth:5.99686175619456
+Total heuristic evaluations: 159929
+Evaluations by depth: {6: 159773, 5: 1, 4: 42, 3: 1, 2: 55, 1: 57}
+Average evaluation depth:5.996292104621426
 Average recursion depth: 1.0175555081975227
 (move #2)
 
@@ -47,7 +53,7 @@ Average recursion depth: 1.0175555081975227
 6|. . . . . . . . 
 7|. . . . . . . . 
 
-Evaluation time: 0.0010002s
+Evaluation time: 0.0009968s
 Player X under AI control plays: D4
 Total heuristic evaluations: 1170
 Evaluations by depth: {2: 1170}
@@ -66,11 +72,11 @@ Average recursion depth: 1.0701754385964912
 6|. . . . . . . . 
 7|. . . . . . . . 
 
-Evaluation time: 0.9016161s
+Evaluation time: 0.9026332s
 Player O under AI control plays: E1
-Total heuristic evaluations: 151405
-Evaluations by depth: {6: 151237, 5: 13, 4: 46, 3: 1, 2: 53, 1: 55}
-Average evaluation depth:5.996070142993957
+Total heuristic evaluations: 144712
+Evaluations by depth: {6: 144556, 5: 1, 4: 45, 3: 2, 2: 53, 1: 55}
+Average evaluation depth:5.995964398253082
 Average recursion depth: 1.0182143088393087
 (move #4)
 
@@ -85,7 +91,7 @@ Average recursion depth: 1.0182143088393087
 6|. . . . . . . . 
 7|. . . . . . . . 
 
-Evaluation time: 0.000999s
+Evaluation time: 0.000998s
 Player X under AI control plays: E4
 Total heuristic evaluations: 942
 Evaluations by depth: {2: 942}
@@ -104,12 +110,12 @@ Average recursion depth: 1.0727272727272728
 6|. . . . . . . . 
 7|. . . . . . . . 
 
-Evaluation time: 0.903584s
+Evaluation time: 0.9119542s
 Player O under AI control plays: C3
-Total heuristic evaluations: 132200
-Evaluations by depth: {6: 132027, 5: 1, 4: 45, 3: 22, 2: 52, 1: 53}
-Average evaluation depth:5.995234493192133
-Average recursion depth: 1.0189046411447447
+Total heuristic evaluations: 98971
+Evaluations by depth: {6: 98789, 5: 1, 4: 39, 3: 37, 2: 52, 1: 53}
+Average evaluation depth:5.993301067989613
+Average recursion depth: 1.0188976503895113
 (move #6)
 
   A B C D E F G H 
@@ -123,7 +129,7 @@ Average recursion depth: 1.0189046411447447
 6|. . . . . . . . 
 7|. . . . . . . . 
 
-Evaluation time: 0.0009968s
+Evaluation time: 0.000998s
 Player X under AI control plays: C2
 Total heuristic evaluations: 615
 Evaluations by depth: {2: 615}
@@ -142,11 +148,11 @@ Average recursion depth: 1.0566037735849056
 6|. . . . . . . . 
 7|. . . . . . . . 
 
-Evaluation time: 0.902617s
+Evaluation time: 0.9056041s
 Player O under AI control plays: D2
-Total heuristic evaluations: 109122
-Evaluations by depth: {6: 108836, 5: 133, 4: 12, 3: 41, 2: 49, 1: 51}
-Average evaluation depth:5.993301075860047
+Total heuristic evaluations: 102508
+Evaluations by depth: {6: 102262, 5: 93, 4: 9, 3: 44, 2: 49, 1: 51}
+Average evaluation depth:5.993229796698794
 Average recursion depth: 1.0200413113963533
 (move #8)
 
@@ -161,7 +167,7 @@ Average recursion depth: 1.0200413113963533
 6|. . . . . . . . 
 7|. . . . . . . . 
 
-Evaluation time: 0.0010271s
+Evaluation time: 0.0009971s
 Player X under AI control plays: B0
 Total heuristic evaluations: 320
 Evaluations by depth: {2: 320}
@@ -180,11 +186,11 @@ Average recursion depth: 1.0196078431372548
 6|. . . . . . . . 
 7|. . . . . . . . 
 
-Evaluation time: 0.9041309s
+Evaluation time: 0.9035869s
 Player O under AI control plays: F0
-Total heuristic evaluations: 107056
-Evaluations by depth: {6: 106543, 5: 369, 3: 21, 4: 28, 2: 46, 1: 49}
-Average evaluation depth:5.991434389478404
+Total heuristic evaluations: 90697
+Evaluations by depth: {6: 90205, 5: 344, 3: 22, 4: 31, 2: 46, 1: 49}
+Average evaluation depth:5.99006582356638
 Average recursion depth: 1.0204168633225723
 (move #10)
 
@@ -201,9 +207,9 @@ Average recursion depth: 1.0204168633225723
 
 
 The winner is O!
-6(b)i Average evaluation time: 0.452194
-6(b)ii Total heuristic evaluations: 683867
-6(b)iii Evaluations by depth: {2: 4302, 6: 678538, 5: 517, 4: 159, 3: 86, 1: 265}
-6(b)iv Average evaluation depth: 5.971301437267773
+6(b)i Average evaluation time: 0.4532378200000001
+6(b)ii Total heuristic evaluations: 600864
+6(b)iii Evaluations by depth: {2: 4302, 6: 595585, 5: 440, 4: 166, 3: 106, 1: 265}
+6(b)iv Average evaluation depth: 5.967342027480428
 6(b)v Average recursion depth: 1.039
 6(b)vi Total moves: 10

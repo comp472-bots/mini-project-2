@@ -642,6 +642,14 @@ class Game:
 		#Open gametrace file and clear contents
 		file_gametrace = open(F'./output/{file_gametrace}',"a")
 		file_gametrace.truncate(0)
+		params = F'n={board_size} b={bloc_amount} s={lineup_size} t={max_allowed_time}'
+		player_1 = F'Player 1: AI d={max_depth_p1}'
+		player_2 = F'Player 2: AI d={max_depth_p2}'
+		minimax = F'a={search_type}'
+		file_gametrace.write(params + "\n\n")
+		file_gametrace.write(player_1 + "\n")
+		file_gametrace.write(player_2 + "\n")
+		file_gametrace.write(minimax + "\n\n")
 
 		self.board_size = board_size
 		self.bloc_amount = bloc_amount
@@ -764,6 +772,14 @@ class Game:
 
 		file_scoreboard = open(F'./output/{scoreboard_name}',"a")
 		file_scoreboard.truncate(0)
+		params = F'n={board_size} b={bloc_amount} s={lineup_size} t={max_allowed_time}'
+		player_1 = F'Player 1: AI d={max_depth_p1}'
+		player_2 = F'Player 2: AI d={max_depth_p2}'
+		minimax = F'a={search_type}'
+		file_scoreboard.write(params + "\n\n")
+		file_scoreboard.write(player_1 + "\n")
+		file_scoreboard.write(player_2 + "\n")
+		file_scoreboard.write(minimax + "\n\n")
 		self.write_to_scoreboard(file_scoreboard, wins, average_eval_time, total_heuristic_evaluations, total_depths, average_eval_depth, average_ard, total_moves)
 
 def main():

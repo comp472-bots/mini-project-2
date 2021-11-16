@@ -1,10 +1,16 @@
+n=4 b=4 s=3 t=5
+
+Player 1: AI d=6
+Player 2: AI d=6
+a=False
+
 
 
 10 games
 Total wins for 'X': 10 (100.0%)
 Total wins for 'O': 0 (0.0%)
 Total ties: 0 (0.0%)
-i Average evaluation time: 0.3330241257142857
+i Average evaluation time: 0.34855192999999995
 ii Total heuristic evaluations: 10819910
 iii Evaluations by depth: {6: 10628280, 5: 171040, 4: 18320, 3: 1980, 2: 260, 1: 30}
 iv Average evaluation depth: 5.980146784954774
