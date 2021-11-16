@@ -585,7 +585,8 @@ class Game:
 		while True:
 			self.draw_board()
 			if self.check_end():
-				self.calculate_game_averages(time_list, depth_list, ard_list, self.total_moves)
+				(average_eval_time, total_heuristic_evaluations, total_depths, average_eval_depth, average_ard, num_moves) = self.calculate_game_averages(time_list, depth_list, ard_list, self.total_moves)
+				self.print_average_metrics(average_eval_time, total_heuristic_evaluations, total_depths, average_eval_depth, average_ard, num_moves)
 				return
 			start = time.time()
 			cutoff_time = start + self.max_allowed_time
